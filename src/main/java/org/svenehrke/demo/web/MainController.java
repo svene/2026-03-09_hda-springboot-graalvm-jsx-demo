@@ -1,19 +1,40 @@
 package org.svenehrke.demo.web;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.svenehrke.demo.core.Person;
+import org.graalvm.polyglot.*;
 
 import java.util.List;
 
 @RestController
 public class MainController {
 
+	private final JsxRenderer renderer;
+
+	public MainController(JsxRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+
 	@GetMapping("/")
 	public RedirectView index() {
-		return new RedirectView("/persons");
+		return new RedirectView("/user");
 	}
+
+	@GetMapping("/user")
+	@ResponseBody
+	public String getUser() {
+
+		// fetch from DB
+		String name = "John";
+		int age = 42;
+
+		return renderer.renderUserPage(name, age);
+	}
+
 	@GetMapping("/persons")
 	public List<Person> persons()
 	{
