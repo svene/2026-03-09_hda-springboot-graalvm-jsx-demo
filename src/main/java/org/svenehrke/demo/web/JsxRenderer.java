@@ -1,10 +1,7 @@
 package org.svenehrke.demo.web;
 
 import jakarta.annotation.PostConstruct;
-import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.Source;
-import org.graalvm.polyglot.Value;
-import org.graalvm.polyglot.proxy.ProxyObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -13,16 +10,17 @@ import java.io.IOException;
 @Service
 public class JsxRenderer {
 
-	private Context context;
-	private Value renderPageFunction;
-	private final String entryFunction = "renderPage"; // TODO: make it configurable?
+	private org.graalvm.polyglot.Context context;
+	private org.graalvm.polyglot.Value renderPageFunction;
+	private final String entryFunction;
 
-	public JsxRenderer() {
+	public JsxRenderer(@Value("${app.ssr.entryfunction}") String entryFunction) {
+		this.entryFunction = entryFunction;
 	}
 
 	@PostConstruct
 	public void init() throws IOException {
-		context = Context.newBuilder("js").allowAllAccess(true).build();
+		context = org.graalvm.polyglot.Context.newBuilder("js").allowAllAccess(true).build();
 		context.eval("js", """
 			class TextEncoder {
 			  encode(str) {
@@ -47,7 +45,7 @@ public class JsxRenderer {
 			""");
 		context.eval("js", "var module = {exports:{}}; var exports = module.exports;");
 
-		Source source = Source.newBuilder("js", new File("target/classes/static/fe/ssr.js")).build();
+		var source = org.graalvm.polyglot.Source.newBuilder("js", new File("target/classes/static/fe/ssr.js")).build();
 		context.eval(source);
 
 		renderPageFunction = context.getBindings("js")
@@ -66,8 +64,8 @@ public class JsxRenderer {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		Value result = renderPageFunction.execute(
-			ProxyObject.fromMap(
+		var result = renderPageFunction.execute(
+			org.graalvm.polyglot.proxy.ProxyObject.fromMap(
 				java.util.Map.of(
 					"user",
 					java.util.Map.of(
