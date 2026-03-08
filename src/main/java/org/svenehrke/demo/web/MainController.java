@@ -13,11 +13,15 @@ import java.util.List;
 public class MainController {
 
 	private final JsxRenderer renderer;
+	private final AppConfig appConfig;
 
-	public MainController(JsxRenderer renderer) {
+	public MainController(
+		JsxRenderer renderer,
+		AppConfig appConfig
+	) {
 		this.renderer = renderer;
+		this.appConfig = appConfig;
 	}
-
 
 	@GetMapping("/")
 	public RedirectView index() {

@@ -1,7 +1,6 @@
 package org.svenehrke.demo.web;
 
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -12,10 +11,15 @@ public class JsxRenderer {
 
 	private org.graalvm.polyglot.Context context;
 	private org.graalvm.polyglot.Value renderPageFunction;
-	private final String entryFunction;
+	private final AppConfig appConfig;
+	private final AppConfigProperties appConfigProperties;
 
-	public JsxRenderer(@Value("${app.ssr.entryfunction}") String entryFunction) {
-		this.entryFunction = entryFunction;
+	public JsxRenderer(
+		AppConfig appConfig,
+		AppConfigProperties appConfigProperties
+	) {
+		this.appConfig = appConfig;
+		this.appConfigProperties = appConfigProperties;
 	}
 
 	@PostConstruct
@@ -51,18 +55,20 @@ public class JsxRenderer {
 		renderPageFunction = context.getBindings("js")
 			.getMember("module")
 			.getMember("exports")
-			.getMember(entryFunction);
+			.getMember(appConfigProperties.entryfunction());
 
 		if (!renderPageFunction.canExecute()) {
-			throw new RuntimeException("'%s 'is undefined or not executable".formatted(entryFunction));
+			throw new RuntimeException("'%s 'is undefined or not executable".formatted(appConfigProperties.entryfunction()));
 		}
 	}
 
 	public String renderPage(String name, int age) {
-		try {
-			init();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		if (appConfig.isDevMode()) {
+			try {
+				init();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		record User(String name, int age) {}
 		record PageProps(User user) {}
