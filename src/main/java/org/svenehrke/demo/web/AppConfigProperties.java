@@ -10,6 +10,7 @@ public record AppConfigProperties(
 ) {
 
 	public record Ssr(
+		String filename,
 		String entryfunction
 	){}
 

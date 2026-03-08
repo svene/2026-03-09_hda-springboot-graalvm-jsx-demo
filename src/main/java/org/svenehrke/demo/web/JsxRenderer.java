@@ -26,7 +26,7 @@ public class JsxRenderer {
 	@PostConstruct
 	public void init() throws IOException {
 		jsInitializer = new JsInitializer(
-			"target/classes/static/fe/ssr.js",  // TODO: use resource, not file location
+			appConfigProperties.ssr().filename(),  // TODO: use resource, not file location
 			appConfigProperties.ssr().entryfunction()
 		);
 	}
