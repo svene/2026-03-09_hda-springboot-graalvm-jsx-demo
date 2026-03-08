@@ -1,4 +1,3 @@
-import {render, h} from "preact";
 import {Layout} from "./layout";
 import {User} from "./models";
 import {Hello} from "./hello";
@@ -10,4 +9,3 @@ export const Page = (props: User) => (
 		<Hello message="Hi there!"></Hello>
 	</Layout>
 );
-export {render, h}
