@@ -2,6 +2,8 @@ package org.svenehrke.demo.web;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
+import org.svenehrke.demo.inbound.web.PageVM;
+import org.svenehrke.demo.inbound.web.UserVM;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,12 +72,9 @@ public class JsxRenderer {
 				throw new RuntimeException(e);
 			}
 		}
-		record User(String name, int age) {}
-		record PageProps(User user) {}
+		var pageVM = new PageVM(new UserVM(name, age));
 
-		var props = new PageProps(new User(name, age));
-
-		var result = renderPageFunction.execute(JsConverter.toJs(props));
+		var result = renderPageFunction.execute(JsConverter.toJs(pageVM));
 		return result.asString();
 	}
 
