@@ -64,16 +64,13 @@ public class JsxRenderer {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		var result = renderPageFunction.execute(
-			org.graalvm.polyglot.proxy.ProxyObject.fromMap(
-				java.util.Map.of(
-					"user",
-					java.util.Map.of(
-						"name", name,
-						"age", age
-					)
-				)
-			)
-		);
+		record User(String name, int age) {}
+		record PageProps(User user) {}
+
+		var props = new PageProps(new User(name, age));
+
+		var result = renderPageFunction.execute(JsConverter.toJs(props));
 		return result.asString();
-	}}
+	}
+
+}
