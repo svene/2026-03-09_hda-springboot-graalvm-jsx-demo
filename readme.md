@@ -1,4 +1,10 @@
-# HDA PoC with Spring Boot, JSX and GraalVM
+# SpringBoot-GraalVM-JSX HDA Demo
+
+Hypermedia driven Application using:
+
+- GraalVM
+- Spring Boot
+- JSX (from Hono)
 
 ## Development
 
