@@ -1,11 +1,11 @@
-package org.svenehrke.demo.web;
+package org.svenehrke.demo.inbound.web;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 import org.svenehrke.demo.core.Person;
-import org.svenehrke.demo.web.infra.js.JsxRenderer;
+import org.svenehrke.demo.inbound.web.infra.js.JsxRenderer;
 
 import java.util.List;
 

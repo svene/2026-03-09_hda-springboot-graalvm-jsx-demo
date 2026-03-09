@@ -1,4 +1,4 @@
-package org.svenehrke.demo.web.infra.js;
+package org.svenehrke.demo.inbound.web.infra.js;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.Resource;

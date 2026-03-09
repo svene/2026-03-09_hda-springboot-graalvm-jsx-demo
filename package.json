@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npx esbuild src/main/java/org/svenehrke/demo/web/render.tsx --bundle --platform=neutral --format=cjs --outfile=target/classes/static/fe/ssr.js",
+    "build": "npx esbuild src/main/java/org/svenehrke/demo/inbound/web/render.tsx --bundle --platform=neutral --format=cjs --outfile=target/classes/static/fe/ssr.js",
     "watch": "bun watch.ts"
   },
   "dependencies": {
