@@ -37,12 +37,11 @@ public class PagesController {
 
 	@GetMapping(HonoWebApiConsts.PAGE)
 	@ResponseBody
-	public String page1(Model model) {
-		model.addAttribute("devMode", activeProfile.contains("dev"));
+	public String page1() {
+		// TODO:
+		//	 model.addAttribute("devMode", activeProfile.contains("dev"));
 
 		var vm = new PersonPageModel(peopleService.personTableModel());
-//		model.addAttribute("vm", makeVM(vm));
-
 		return renderer.renderPage(vm);
 	}
 
