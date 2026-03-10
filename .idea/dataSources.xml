@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1 [DEBUG]" group="​Application_dev" uuid="0af3a497-c7a1-4831-9a77-c7778b42c3c5">
+      <driver-ref>hsqldb.local</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <jdbc-driver>org.hsqldb.jdbc.JDBCDriver</jdbc-driver>
+      <jdbc-url>jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>

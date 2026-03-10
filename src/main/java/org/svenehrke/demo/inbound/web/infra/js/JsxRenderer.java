@@ -3,10 +3,10 @@ package org.svenehrke.demo.inbound.web.infra.js;
 import jakarta.annotation.PostConstruct;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.svenehrke.demo.inbound.web.PageVM;
-import org.svenehrke.demo.inbound.web.UserVM;
 import org.svenehrke.demo.app.AppConfigProperties;
 import org.svenehrke.demo.app.RuntimeEnvironment;
+import org.svenehrke.demo.core.PeopleService;
+import org.svenehrke.demo.inbound.web.PersonPageModel;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,7 +28,7 @@ public class JsxRenderer {
 	) {
 		this.runtimeEnvironment = runtimeEnvironment;
 		this.appConfigProperties = appConfigProperties;
-		this.resource = appConfigProperties.ssr().resource();
+		resource = appConfigProperties.ssr().resource();
 	}
 
 	@PostConstruct
@@ -40,7 +40,7 @@ public class JsxRenderer {
 		);
 	}
 
-	public String renderPage(String name, int age) {
+	public String renderPage(PersonPageModel vm) {
 		if (runtimeEnvironment.isDevMode()) {
 			try {
 				init();
@@ -48,9 +48,7 @@ public class JsxRenderer {
 				throw new RuntimeException(e);
 			}
 		}
-		var pageVM = new PageVM(new UserVM(name, age));
-
-		var result = jsInitializer.getEntryFunction().execute(JsConverter.toJs(pageVM));
+		var result = jsInitializer.getEntryFunction().execute(JsConverter.toJs(vm));
 		return result.asString();
 	}
 
