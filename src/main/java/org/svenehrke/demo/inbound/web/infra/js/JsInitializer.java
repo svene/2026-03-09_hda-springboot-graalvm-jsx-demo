@@ -5,8 +5,13 @@ import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class JsInitializer {
-	private org.graalvm.polyglot.Context context;
+
+    private final Context context;
+    private final Map<String, Value> entryFunctions = new HashMap<>();
 
 	public JsInitializer(Engine engine, Source source) {
 		Context ctx = Context.newBuilder("js")
@@ -39,17 +44,26 @@ public class JsInitializer {
 		ctx.eval("js", "var module = {exports:{}}; var exports = module.exports;");
 		ctx.eval(source);
 
-		context = ctx;
+        context = ctx;
+
+        // Resolve exports once
+        Value exports = context.getBindings("js")
+            .getMember("module")
+            .getMember("exports");
+
+        for (String key : exports.getMemberKeys()) {
+            Value member = exports.getMember(key);
+            if (member.canExecute()) {
+                entryFunctions.put(key, member);
+            }
+        }
 	}
 
 	public Value getEntryFunction(String name) {
-		var entryFunction = context.getBindings("js")
-			.getMember("module")
-			.getMember("exports")
-			.getMember(name);
-		if (!entryFunction.canExecute()) {
-			throw new RuntimeException("'%s 'is undefined or not executable".formatted(name));
+        Value fn = entryFunctions.get(name);
+        if (fn == null) {
+            throw new RuntimeException("JS function '%s' not found".formatted(name));
 		}
-		return entryFunction;
+        return fn;
 	}
 }

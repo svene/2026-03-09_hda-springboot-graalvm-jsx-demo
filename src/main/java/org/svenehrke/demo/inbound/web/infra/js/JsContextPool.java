@@ -13,7 +13,7 @@ public class JsContextPool {
 	public JsContextPool(int size, Supplier<JsInitializer> factory, boolean devMode) {
 		this.factory = factory;
 		this.devMode = devMode;
-		this.pool = new ArrayBlockingQueue<>(size);
+		pool = new ArrayBlockingQueue<>(size);
 
 		for (int i = 0; i < size; i++) {
 			pool.add(factory.get());
