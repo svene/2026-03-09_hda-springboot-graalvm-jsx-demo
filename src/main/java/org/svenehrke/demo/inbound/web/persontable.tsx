@@ -2,7 +2,7 @@ import {HonoWebApiConsts} from "./hono-web-api-shared-consts";
 import {PersonTableModel} from "./vm/person-page-model-vm";
 import {PersonRow} from "./personrow";
 
-export const PersonTable = (props: { vm: PersonTableModel }) => (
+export const PersonTable = ({vm}: { vm: PersonTableModel }) => (
 	<div id="result-table">
 		<table class="table">
 			<thead>
@@ -25,10 +25,10 @@ export const PersonTable = (props: { vm: PersonTableModel }) => (
 			</tr>
 			</thead>
 			<tbody>
-			{props.vm.people.map((it) => (<PersonRow vm={it}/>))}
+			{vm.people.map((it) => (<PersonRow vm={it}/>))}
 			</tbody>
 		</table>
-		<div>{props.vm.people.length} of total {props.vm.total}</div>
+		<div>{vm.people.length} of total {vm.total}</div>
 
 	</div>
 );

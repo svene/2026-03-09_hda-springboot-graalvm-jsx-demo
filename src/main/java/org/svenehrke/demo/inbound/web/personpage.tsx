@@ -3,7 +3,7 @@ import {PersonPageModel} from "./vm/person-page-model-vm";
 import {HonoWebApiConsts} from "./hono-web-api-shared-consts";
 import {PersonTable} from "./persontable";
 
-export const Page = (vm: PersonPageModel) => (
+export const Page = ({vm}: {vm: PersonPageModel}) => (
 	<Layout>
 		<div className="container mt-1">
 
