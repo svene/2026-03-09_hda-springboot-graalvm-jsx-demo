@@ -1,5 +1,6 @@
 package org.svenehrke.demo.inbound.web.infra.js;
 
+import jakarta.annotation.PostConstruct;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Source;
 import org.springframework.core.io.Resource;
@@ -14,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class JsxRenderer {
 
-	private final RuntimeEnvironment runtimeEnvironment;
 	private final JsContextPool jsContextPool;
 	private final JsonMapper jsonMapper;
 
@@ -24,36 +24,43 @@ public class JsxRenderer {
 
 
 	public JsxRenderer(
-		RuntimeEnvironment runtimeEnvironment,
 		JsonMapper jsonMapper,
 		AppConfigProperties appConfigProperties
 	) {
-		this.runtimeEnvironment = runtimeEnvironment;
 		this.jsonMapper = jsonMapper;
 		resource = appConfigProperties.ssr().resource();
 		engine = Engine.create();
-		reloadSource();
 
 		int poolSize = Runtime.getRuntime().availableProcessors();
-		jsContextPool = new JsContextPool(poolSize, this::buildJsInitializer, runtimeEnvironment.isDevMode());
+		jsContextPool = new JsContextPool(poolSize, this::buildJsInitializer);
+	}
+
+	@PostConstruct
+	public void init() {
+		reloadBundle();
+//		jsContextPool.init();
 	}
 
 	private JsInitializer buildJsInitializer() {
 		return new JsInitializer(engine, source);
 	}
-	private synchronized void reloadSource() {
+
+	/**
+	 * Reloads the JS bundle and rebuilds the pool.
+	 * Called by JsBundleWatcher when the file changes.
+	 */
+	public synchronized void reloadBundle() {
 		try {
 			String code = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 			source = Source.newBuilder("js", code, resource.getFilename()).build();
-		} catch (IOException e) {
+			jsContextPool.reset();
+		}
+		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	public String render(String entryFunctionName, Object vm) {
-		if (runtimeEnvironment.isDevMode()) {
-			reloadSource();
-		}
 		JsInitializer ctx = null;
 		try {
 			ctx = jsContextPool.borrow();
@@ -70,5 +77,4 @@ public class JsxRenderer {
 			}
 		}
 	}
-
 }

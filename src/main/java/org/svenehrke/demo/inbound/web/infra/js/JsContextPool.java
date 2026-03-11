@@ -8,35 +8,39 @@ public class JsContextPool {
 
 	private final BlockingQueue<JsInitializer> pool;
 	private final Supplier<JsInitializer> factory;
-	private final boolean devMode;
+    private final int size;
 
-	public JsContextPool(int size, Supplier<JsInitializer> factory, boolean devMode) {
+    public JsContextPool(int size, Supplier<JsInitializer> factory) {
+        this.size = size;
 		this.factory = factory;
-		this.devMode = devMode;
-		pool = new ArrayBlockingQueue<>(size);
+        pool = new ArrayBlockingQueue<>(size);
+    }
 
+    public void init() {
+		fillPool();
+	}
+
+    private void fillPool() {
+		System.out.println("JsContextPool.fillPool");
 		for (int i = 0; i < size; i++) {
-			pool.add(factory.get());
+            pool.offer(factory.get());
 		}
 	}
 
 	public JsInitializer borrow() throws InterruptedException {
-
-		if (devMode) {
-			// recreate context every borrow in dev
-			return factory.get();
-		}
-
 		return pool.take();
 	}
 
 	public void release(JsInitializer ctx) {
-
-		if (devMode) {
-			// dev contexts are disposable
-			return;
-		}
-
 		pool.offer(ctx);
 	}
+
+    /**
+     * Rebuilds all contexts in the pool.
+     * Used when the JS bundle changes in development.
+     */
+    public synchronized void reset() {
+        pool.clear();
+        fillPool();
+    }
 }

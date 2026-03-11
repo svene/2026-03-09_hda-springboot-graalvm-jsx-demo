@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class JsInitializer {
 
-    private final Context context;
     private final Map<String, Value> entryFunctions = new HashMap<>();
 
 	public JsInitializer(Engine engine, Source source) {
@@ -44,10 +43,8 @@ public class JsInitializer {
 		ctx.eval("js", "var module = {exports:{}}; var exports = module.exports;");
 		ctx.eval(source);
 
-        context = ctx;
-
         // Resolve exports once
-        Value exports = context.getBindings("js")
+        Value exports = ctx.getBindings("js")
             .getMember("module")
             .getMember("exports");
 

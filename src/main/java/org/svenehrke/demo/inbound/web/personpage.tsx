@@ -9,7 +9,7 @@ export const Page = ({vm}: {vm: PersonPageModel}) => (
 
 			<div className="p-1 mt-1 area-border" style="min-height: 500px">
 				<div className="field">
-					<label class="label">Search</label>
+					<label class="label">XSearch</label>
 					<div className="control">
 						<input
 							class="input"
