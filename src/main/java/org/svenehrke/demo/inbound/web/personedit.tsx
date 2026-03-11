@@ -2,7 +2,7 @@ import {PersonEditModel} from "./vm/person-page-model-vm";
 import {detailsCardUrl, updateUrl} from "./route-builder";
 import {EvtBackendEvents} from "./hono-web-api-shared-consts";
 
-export const EvtPersonEditor = ({ vm }: {vm: PersonEditModel}) => (
+export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 	<tr id={`row-${vm.id}-edit`}>
 		<template
 			hx-trigger={`

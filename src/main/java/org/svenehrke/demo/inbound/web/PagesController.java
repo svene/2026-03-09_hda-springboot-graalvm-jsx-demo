@@ -53,25 +53,19 @@ public class PagesController {
 	@GetMapping(HonoWebApiConsts.PERSON_ROW)
 	public String row(@PathVariable int id, Model model) {
 		PersonTableRowModel vm = peopleService.personTableRowModel(id);
-		model.addAttribute("cmpName", "personrow");
-		model.addAttribute("vm", makeVM(vm));
-		return "pages/tr";
+		return renderer.render("personRow", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_EDIT)
 	public String edit(@PathVariable int id, Model model) {
 		PersonEditModel vm = peopleService.personEditModel(id);
-		model.addAttribute("cmpName", "personedit");
-		model.addAttribute("vm", makeVM(vm));
-		return "pages/tr";
+		return renderer.render("personEdit", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_CARD)
 	public String detailsCard(@PathVariable int id, Model model) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
-		model.addAttribute("cmpName", "persondetailscard");
-		model.addAttribute("vm", makeVM(vm));
-		return "pages/tr";
+		return renderer.render("personDetailsCard", vm);
 	}
 
 	@PutMapping(HonoWebApiConsts.PERSON)
@@ -84,26 +78,17 @@ public class PagesController {
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_ROW)
 	public String detailsRow(@PathVariable int id, Model model) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
-		model.addAttribute("cmpName", "persondetailrow");
-		model.addAttribute("vm", makeVM(vm));
-		return "pages/tr";
+		return renderer.render("personDetailsRow", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_TABLE)
 	public String peopleUrl(@RequestParam() String search, Model model) {
 		PersonTableModel vm = peopleService.peopleForSearch(search);
-		model.addAttribute("cmpName", "persontable");
-		model.addAttribute("vm", makeVM(vm));
-		return "pages/div";
+		return renderer.render("personTable", vm);
 	}
 	@DeleteMapping(HonoWebApiConsts.DELETE)
 	public void deleteRows(@RequestParam List<Integer> selection, HttpServletResponse response) {
 		peopleService.deleteByIds(selection);
 		response.setHeader(HX_REDIRECT, HonoWebApiConsts.PAGE);
-	}
-
-	private String makeVM(Object vm) {
-		record VMWrapper(Object vm) { }
-		return jsonMapper.writeValueAsString(new VMWrapper(vm));
 	}
 }

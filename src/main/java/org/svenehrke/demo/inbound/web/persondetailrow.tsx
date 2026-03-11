@@ -33,8 +33,3 @@ export const PersondetailsRow = ({vm}: { vm: PersonDetailModel }) => (
 export const EvtPersonDetailsRowX = {
 	CLOSE_REQUESTED: 'close-details-requested',
 }
-export const XXX = {
-	A: () => (
-		<div>hallo</div>
-	)
-}
