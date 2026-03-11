@@ -3,13 +3,10 @@ package org.svenehrke.demo.inbound.web;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.svenehrke.demo.core.PeopleService;
 import org.svenehrke.demo.inbound.web.HonoWebApiSharedConsts.HonoWebApiConsts;
 import org.svenehrke.demo.inbound.web.infra.js.JsxRenderer;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -19,15 +16,13 @@ import static org.svenehrke.demo.inbound.web.HTMXConsts.HX_REDIRECT;
 @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
 public class PagesController {
 
-	private final JsonMapper jsonMapper;
 	private final PeopleService peopleService;
 	private final JsxRenderer renderer;
 
 	@Value("${spring.profiles.active:}")
 	private String activeProfile;
 
-	public PagesController(JsonMapper jsonMapper, PeopleService peopleService, JsxRenderer renderer) {
-		this.jsonMapper = jsonMapper;
+	public PagesController(PeopleService peopleService, JsxRenderer renderer) {
 		this.peopleService = peopleService;
 		this.renderer = renderer;
 	}
@@ -45,25 +40,25 @@ public class PagesController {
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS)
-	public String details(@PathVariable int id, Model model) {
+	public String details(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
 		return renderer.render("personDetails", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_ROW)
-	public String row(@PathVariable int id, Model model) {
+	public String row(@PathVariable int id) {
 		PersonTableRowModel vm = peopleService.personTableRowModel(id);
 		return renderer.render("personRow", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_EDIT)
-	public String edit(@PathVariable int id, Model model) {
+	public String edit(@PathVariable int id) {
 		PersonEditModel vm = peopleService.personEditModel(id);
 		return renderer.render("personEdit", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_CARD)
-	public String detailsCard(@PathVariable int id, Model model) {
+	public String detailsCard(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
 		return renderer.render("personDetailsCard", vm);
 	}
@@ -76,13 +71,13 @@ public class PagesController {
 			""".formatted(HonoWebApiSharedConsts.EvtBackendEvents.PERSON_UPDATED, id));
 	}
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_ROW)
-	public String detailsRow(@PathVariable int id, Model model) {
+	public String detailsRow(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
 		return renderer.render("personDetailsRow", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_TABLE)
-	public String peopleUrl(@RequestParam() String search, Model model) {
+	public String peopleUrl(@RequestParam() String search) {
 		PersonTableModel vm = peopleService.peopleForSearch(search);
 		return renderer.render("personTable", vm);
 	}

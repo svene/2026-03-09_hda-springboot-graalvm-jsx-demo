@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.svenehrke.demo.app.AppConfigProperties;
 import org.svenehrke.demo.app.RuntimeEnvironment;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,6 +16,7 @@ public class JsxRenderer {
 
 	private final RuntimeEnvironment runtimeEnvironment;
 	private final JsContextPool jsContextPool;
+	private final JsonMapper jsonMapper;
 
 	private final Resource resource;
 	private final Engine engine;
@@ -23,9 +25,11 @@ public class JsxRenderer {
 
 	public JsxRenderer(
 		RuntimeEnvironment runtimeEnvironment,
+		JsonMapper jsonMapper,
 		AppConfigProperties appConfigProperties
 	) {
 		this.runtimeEnvironment = runtimeEnvironment;
+		this.jsonMapper = jsonMapper;
 		resource = appConfigProperties.ssr().resource();
 		engine = Engine.create();
 		reloadSource();
@@ -53,9 +57,11 @@ public class JsxRenderer {
 		JsInitializer ctx = null;
 		try {
 			ctx = jsContextPool.borrow();
-			var result = ctx.getEntryFunction(entryFunctionName).execute(JsConverter.toJs(vm));
+			String vmJson = jsonMapper.writeValueAsString(vm);
+			var result = ctx.getEntryFunction(entryFunctionName).execute(vmJson);
 			return result.asString();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new RuntimeException(e);
 		}
 		finally {
