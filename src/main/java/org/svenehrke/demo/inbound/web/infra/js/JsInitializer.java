@@ -1,17 +1,19 @@
 package org.svenehrke.demo.inbound.web.infra.js;
 
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
-
-import java.io.IOException;
-import java.io.Reader;
 
 public class JsInitializer {
 	private org.graalvm.polyglot.Context context;
 
-	public JsInitializer(String rootFilename, Reader isr) throws IOException {
-		Context ctx = Context.newBuilder("js").allowAllAccess(true).build();
+	public JsInitializer(Engine engine, Source source) {
+		Context ctx = Context.newBuilder("js")
+			.engine(engine)
+			.allowAllAccess(true)
+			.build();
+
 		ctx.eval("js", """
 			class TextEncoder {
 			  encode(str) {
@@ -35,8 +37,6 @@ public class JsInitializer {
 			}
 			""");
 		ctx.eval("js", "var module = {exports:{}}; var exports = module.exports;");
-
-		var source = Source.newBuilder("js", isr, rootFilename).build();
 		ctx.eval(source);
 
 		context = ctx;

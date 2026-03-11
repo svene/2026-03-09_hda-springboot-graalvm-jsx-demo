@@ -1,24 +1,24 @@
 package org.svenehrke.demo.inbound.web.infra.js;
 
-import jakarta.annotation.PostConstruct;
-import org.jspecify.annotations.NonNull;
+import org.graalvm.polyglot.Engine;
+import org.graalvm.polyglot.Source;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.svenehrke.demo.app.AppConfigProperties;
 import org.svenehrke.demo.app.RuntimeEnvironment;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 @Service
 public class JsxRenderer {
 
 	private final RuntimeEnvironment runtimeEnvironment;
-	private final AppConfigProperties appConfigProperties;
 	private final JsContextPool jsContextPool;
 
 	private final Resource resource;
+	private final Engine engine;
+	private volatile Source source;
 
 
 	public JsxRenderer(
@@ -26,35 +26,41 @@ public class JsxRenderer {
 		AppConfigProperties appConfigProperties
 	) {
 		this.runtimeEnvironment = runtimeEnvironment;
-		this.appConfigProperties = appConfigProperties;
 		resource = appConfigProperties.ssr().resource();
+		engine = Engine.create();
+		reloadSource();
+
 		int poolSize = Runtime.getRuntime().availableProcessors();
 		jsContextPool = new JsContextPool(poolSize, this::buildJsInitializer, runtimeEnvironment.isDevMode());
 	}
 
-	private @NonNull JsInitializer buildJsInitializer() {
+	private JsInitializer buildJsInitializer() {
+		return new JsInitializer(engine, source);
+	}
+	private synchronized void reloadSource() {
 		try {
-			return new JsInitializer(
-				appConfigProperties.ssr().resource().getFilename(),
-				new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)
-			);
+			String code = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+			source = Source.newBuilder("js", code, resource.getFilename()).build();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	public String render(String entryFunctionName, Object vm) {
-		JsInitializer jsInitializer = null;
+		if (runtimeEnvironment.isDevMode()) {
+			reloadSource();
+		}
+		JsInitializer ctx = null;
 		try {
-			jsInitializer = jsContextPool.borrow();
-			var result = jsInitializer.getEntryFunction(entryFunctionName).execute(JsConverter.toJs(vm));
+			ctx = jsContextPool.borrow();
+			var result = ctx.getEntryFunction(entryFunctionName).execute(JsConverter.toJs(vm));
 			return result.asString();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
 		finally {
-			if (jsInitializer != null) {
-				jsContextPool.release(jsInitializer);
+			if (ctx != null) {
+				jsContextPool.release(ctx);
 			}
 		}
 	}
