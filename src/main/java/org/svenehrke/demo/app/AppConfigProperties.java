@@ -11,8 +11,7 @@ public record AppConfigProperties(
 ) {
 
 	public record Ssr(
-		Resource resource,
-		String entryfunction
+		Resource resource
 	){}
 
 }

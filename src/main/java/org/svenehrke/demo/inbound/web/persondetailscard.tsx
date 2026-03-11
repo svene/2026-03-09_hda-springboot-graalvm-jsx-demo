@@ -1,7 +1,7 @@
 import {PersonDetailModel} from "./vm/person-page-model-vm";
 import {editUrl} from "./route-builder";
 
-export const Persondetailscard = (props: { vm: PersonDetailModel }) => (
+export const PersondetailsCard = (props: { vm: PersonDetailModel }) => (
 		<>
 			<tr
 				id={`row-${props.vm.id}-details`}

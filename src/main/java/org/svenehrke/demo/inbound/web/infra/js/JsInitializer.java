@@ -9,9 +9,8 @@ import java.io.Reader;
 
 public class JsInitializer {
 	private org.graalvm.polyglot.Context context;
-	private org.graalvm.polyglot.Value entryFunction;
 
-	public JsInitializer(String rootFilename, Reader isr, String entryFunctionName) throws IOException {
+	public JsInitializer(String rootFilename, Reader isr) throws IOException {
 		Context ctx = Context.newBuilder("js").allowAllAccess(true).build();
 		ctx.eval("js", """
 			class TextEncoder {
@@ -40,18 +39,17 @@ public class JsInitializer {
 		var source = Source.newBuilder("js", isr, rootFilename).build();
 		ctx.eval(source);
 
-		entryFunction = ctx.getBindings("js")
-			.getMember("module")
-			.getMember("exports")
-			.getMember(entryFunctionName);
-		if (!entryFunction.canExecute()) {
-			throw new RuntimeException("'%s 'is undefined or not executable".formatted(entryFunctionName));
-		}
-
 		context = ctx;
 	}
 
-	public Value getEntryFunction() {
+	public Value getEntryFunction(String name) {
+		var entryFunction = context.getBindings("js")
+			.getMember("module")
+			.getMember("exports")
+			.getMember(name);
+		if (!entryFunction.canExecute()) {
+			throw new RuntimeException("'%s 'is undefined or not executable".formatted(name));
+		}
 		return entryFunction;
 	}
 }

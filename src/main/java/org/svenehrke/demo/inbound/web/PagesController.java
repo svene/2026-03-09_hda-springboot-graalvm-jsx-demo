@@ -2,6 +2,7 @@ package org.svenehrke.demo.inbound.web;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,8 @@ import java.util.List;
 
 import static org.svenehrke.demo.inbound.web.HTMXConsts.HX_REDIRECT;
 
-@Controller
+@RestController
+@RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
 public class PagesController {
 
 	private final JsonMapper jsonMapper;
@@ -36,21 +38,16 @@ public class PagesController {
 	}
 
 	@GetMapping(HonoWebApiConsts.PAGE)
-	@ResponseBody
 	public String page1() {
-		// TODO:
-		//	 model.addAttribute("devMode", activeProfile.contains("dev"));
-
+		// TODO: model.addAttribute("devMode", activeProfile.contains("dev"));
 		var vm = new PersonPageModel(peopleService.personTableModel());
-		return renderer.renderPage(vm);
+		return renderer.render("renderPage", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS)
 	public String details(@PathVariable int id, Model model) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
-		model.addAttribute("cmpName", "persondetails");
-		model.addAttribute("vm", makeVM(vm));
-		return "pages/tr";
+		return renderer.render("personDetails", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_ROW)

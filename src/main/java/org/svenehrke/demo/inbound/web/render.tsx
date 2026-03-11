@@ -1,7 +1,11 @@
 import { renderToString } from 'hono/jsx/dom/server';
-import {PersonPageModel} from "./vm/person-page-model-vm";
+import {PersonDetailModel, PersonPageModel} from "./vm/person-page-model-vm";
 import {Page} from "./personpage";
+import {PersonDetails} from "./persondetails";
 
 export function renderPage(vm: PersonPageModel): string {
-	return renderToString(<Page {...vm} />) // TODO: make independent of PageVM and <Page> or have multiple render.tsx files ?
+	return renderToString(<Page {...vm} />)
+}
+export function personDetails(vm: PersonDetailModel): string {
+	return renderToString(<PersonDetails {...vm} />)
 }

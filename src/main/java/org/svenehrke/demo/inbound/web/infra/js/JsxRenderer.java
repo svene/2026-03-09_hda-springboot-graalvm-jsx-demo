@@ -5,8 +5,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.svenehrke.demo.app.AppConfigProperties;
 import org.svenehrke.demo.app.RuntimeEnvironment;
-import org.svenehrke.demo.core.PeopleService;
-import org.svenehrke.demo.inbound.web.PersonPageModel;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,12 +33,11 @@ public class JsxRenderer {
 	public void init() throws IOException {
 		jsInitializer = new JsInitializer(
 			appConfigProperties.ssr().resource().getFilename(),
-			new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8),
-			appConfigProperties.ssr().entryfunction()
+			new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)
 		);
 	}
 
-	public String renderPage(PersonPageModel vm) {
+	public String render(String entryFunctionName, Object vm) {
 		if (runtimeEnvironment.isDevMode()) {
 			try {
 				init();
@@ -48,7 +45,7 @@ public class JsxRenderer {
 				throw new RuntimeException(e);
 			}
 		}
-		var result = jsInitializer.getEntryFunction().execute(JsConverter.toJs(vm));
+		var result = jsInitializer.getEntryFunction(entryFunctionName).execute(JsConverter.toJs(vm));
 		return result.asString();
 	}
 
