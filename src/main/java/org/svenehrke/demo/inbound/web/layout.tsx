@@ -21,15 +21,15 @@ export const Layout = ({ children }: { children: Child }) => (
 
 	</head>
 	<body>
-	<section className="hero is-link">
-		<div className="hero-body">
-			<nav className="level">
-				<div className="level-left">
-					<p className="title">People Admin Application</p>
+	<section class="hero is-link">
+		<div class="hero-body">
+			<nav class="level">
+				<div class="level-left">
+					<p class="title">People Admin Application</p>
 				</div>
-				<div className="level-right">
+				<div class="level-right">
 					<button x-on:click="$store.darkMode.toggle()">
-						<span className="icon"><i className="material-icons" x-text="icon"></i></span>
+						<span class="icon"><i class="material-icons" x-text="icon"></i></span>
 					</button>
 				</div>
 			</nav>

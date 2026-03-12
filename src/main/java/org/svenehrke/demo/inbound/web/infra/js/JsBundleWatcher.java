@@ -54,9 +54,7 @@ public class JsBundleWatcher {
 	}
 
 	private void watchLoop() {
-
 		Path fileName;
-
 		try {
 			fileName = resource.getFile().toPath().getFileName();
 		} catch (IOException e) {
@@ -64,36 +62,30 @@ public class JsBundleWatcher {
 		}
 
 		while (!Thread.currentThread().isInterrupted()) {
-
 			WatchKey key;
-
 			try {
 				key = watchService.take();
 			}
 			catch (InterruptedException e) {
 				return;
 			}
-
 			for (WatchEvent<?> event : key.pollEvents()) {
-
 				Path changed = (Path) event.context();
-
 				if (changed.equals(fileName)) {
                     jsxRenderer.reloadBundle();
 				}
 			}
-
 			key.reset();
 		}
 	}
 
 	@PreDestroy
 	public void stop() throws IOException {
-        if (watchService != null) {
-		watchService.close();
-        }
-        if (watchThread != null) {
-		watchThread.interrupt();
+		if (watchService != null) {
+			watchService.close();
+		}
+		if (watchThread != null) {
+			watchThread.interrupt();
+		}
 	}
-}
 }

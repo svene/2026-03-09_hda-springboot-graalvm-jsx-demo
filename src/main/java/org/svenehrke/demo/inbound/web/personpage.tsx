@@ -5,12 +5,12 @@ import {PersonTable} from "./persontable";
 
 export const Page = ({vm}: {vm: PersonPageModel}) => (
 	<Layout>
-		<div className="container mt-1">
+		<div class="container mt-1">
 
-			<div className="p-1 mt-1 area-border" style="min-height: 500px">
-				<div className="field">
-					<label class="label">XSearch</label>
-					<div className="control">
+			<div class="p-1 mt-1 area-border" style="min-height: 500px">
+				<div class="field">
+					<label class="label">Search</label>
+					<div class="control">
 						<input
 							class="input"
 							type="search"

@@ -3,10 +3,11 @@ package org.svenehrke.demo.inbound.web.infra.js;
 import jakarta.annotation.PostConstruct;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Source;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.svenehrke.demo.app.AppConfigProperties;
-import org.svenehrke.demo.app.RuntimeEnvironment;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class JsxRenderer {
 	private final Resource resource;
 	private final Engine engine;
 	private volatile Source source;
+	private final Logger log = LoggerFactory.getLogger(JsxRenderer.class);
 
 
 	public JsxRenderer(
@@ -38,7 +40,6 @@ public class JsxRenderer {
 	@PostConstruct
 	public void init() {
 		reloadBundle();
-//		jsContextPool.init();
 	}
 
 	private JsInitializer buildJsInitializer() {
@@ -51,6 +52,7 @@ public class JsxRenderer {
 	 */
 	public synchronized void reloadBundle() {
 		try {
+			log.info("Reloading JS-Code");
 			String code = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 			source = Source.newBuilder("js", code, resource.getFilename()).build();
 			jsContextPool.reset();
