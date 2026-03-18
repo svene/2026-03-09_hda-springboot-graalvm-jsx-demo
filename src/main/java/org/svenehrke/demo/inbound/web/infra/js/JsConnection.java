@@ -18,28 +18,7 @@ public class JsConnection {
 			.allowAllAccess(true)
 			.build();
 
-		ctx.eval("js", """
-			class TextEncoder {
-			  encode(str) {
-				// Convert string to UTF-8 bytes
-				const bytes = [];
-				for (let i = 0; i < str.length; i++) {
-				  const code = str.charCodeAt(i);
-				  if (code < 0x80) {
-					bytes.push(code);
-				  } else if (code < 0x800) {
-					bytes.push(0xc0 | (code >> 6));
-					bytes.push(0x80 | (code & 0x3f));
-				  } else {
-					bytes.push(0xe0 | (code >> 12));
-					bytes.push(0x80 | ((code >> 6) & 0x3f));
-					bytes.push(0x80 | (code & 0x3f));
-				  }
-				}
-				return Uint8Array.from(bytes);
-			  }
-			}
-			""");
+		ctx.eval("js", TEXT_ENCODER);
 		ctx.eval("js", "var module = {exports:{}}; var exports = module.exports;");
 		ctx.eval(source);
 
@@ -63,4 +42,26 @@ public class JsConnection {
 		}
         return fn;
 	}
+	private static final String TEXT_ENCODER = """
+			class TextEncoder {
+			  encode(str) {
+				// Convert string to UTF-8 bytes
+				const bytes = [];
+				for (let i = 0; i < str.length; i++) {
+				  const code = str.charCodeAt(i);
+				  if (code < 0x80) {
+					bytes.push(code);
+				  } else if (code < 0x800) {
+					bytes.push(0xc0 | (code >> 6));
+					bytes.push(0x80 | (code & 0x3f));
+				  } else {
+					bytes.push(0xe0 | (code >> 12));
+					bytes.push(0x80 | ((code >> 6) & 0x3f));
+					bytes.push(0x80 | (code & 0x3f));
+				  }
+				}
+				return Uint8Array.from(bytes);
+			  }
+			}
+			""";
 }
