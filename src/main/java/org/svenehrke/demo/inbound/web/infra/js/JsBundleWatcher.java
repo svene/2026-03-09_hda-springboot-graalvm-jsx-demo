@@ -2,6 +2,8 @@ package org.svenehrke.demo.inbound.web.infra.js;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.svenehrke.demo.app.AppConfigProperties;
@@ -13,9 +15,10 @@ import java.nio.file.*;
 @Component
 public class JsBundleWatcher {
 
+	private final Logger log = LoggerFactory.getLogger(JsBundleWatcher.class);
     private final RuntimeEnvironment runtimeEnvironment;
 	private final Resource resource;
-    private final JsxRenderer jsxRenderer;
+    private final JsHolder jsHolder;
 
 	private WatchService watchService;
 	private Thread watchThread;
@@ -23,15 +26,16 @@ public class JsBundleWatcher {
     public JsBundleWatcher(
         RuntimeEnvironment runtimeEnvironment,
         AppConfigProperties appConfigProperties,
-        JsxRenderer jsxRenderer
-    ) {
+		JsHolder jsHolder
+	) {
         this.runtimeEnvironment = runtimeEnvironment;
-        this.resource = appConfigProperties.ssr().resource();
-        this.jsxRenderer = jsxRenderer;
+        resource = appConfigProperties.ssr().resource();
+		this.jsHolder = jsHolder;
 	}
 
 	@PostConstruct
 	public void start() throws IOException {
+		log.info("Starting JsBundleWatcher");
 
         if (!runtimeEnvironment.isDevMode()) {
             return;
@@ -72,7 +76,10 @@ public class JsBundleWatcher {
 			for (WatchEvent<?> event : key.pollEvents()) {
 				Path changed = (Path) event.context();
 				if (changed.equals(fileName)) {
-                    jsxRenderer.reloadBundle();
+                    log.info("calling initpool");
+					jsHolder.initPool();
+				} else {
+					log.info("NOT calling initpool");
 				}
 			}
 			key.reset();

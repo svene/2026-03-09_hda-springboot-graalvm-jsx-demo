@@ -8,11 +8,11 @@ import org.graalvm.polyglot.Value;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsInitializer {
+public class JsConnection {
 
     private final Map<String, Value> entryFunctions = new HashMap<>();
 
-	public JsInitializer(Engine engine, Source source) {
+	public JsConnection(Engine engine, Source source) {
 		Context ctx = Context.newBuilder("js")
 			.engine(engine)
 			.allowAllAccess(true)

@@ -27,11 +27,6 @@ public class PagesController {
 		this.renderer = renderer;
 	}
 
-	@GetMapping("/")
-	public String redirectRoot() {
-		return "redirect:" + HonoWebApiConsts.PAGE;
-	}
-
 	@GetMapping(HonoWebApiConsts.PAGE)
 	public String page1() {
 		// TODO: model.addAttribute("devMode", activeProfile.contains("dev"));
