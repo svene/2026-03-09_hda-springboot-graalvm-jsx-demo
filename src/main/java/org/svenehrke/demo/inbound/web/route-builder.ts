@@ -9,9 +9,6 @@ export const detailsRowUrl = (id: number) =>
 export const detailsUrl = (id: number) =>
 	idUrl(HonoWebApiConsts.PERSON_DETAILS, id);
 
-// export const detailsBackUrl = (id: number) =>
-// 	idUrl(HonoWebApiConsts.PERSON_DETAILS_BACK, id);
-
 export const editUrl = (id: number) =>
 	idUrl(HonoWebApiConsts.PERSON_EDIT, id);
 
