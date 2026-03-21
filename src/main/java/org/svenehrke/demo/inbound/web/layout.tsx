@@ -13,7 +13,6 @@ export const Layout = ({ children }: { children: Child }) => (
 		<script src="/js/hyperscript.org/0.9.14/_hyperscript.js"></script>
 		<script defer src="/js/main.js"></script>
 		<script defer src="/js/alpinejs/3.15.4/cdn.min.js"></script>
-		<script src="/js/mount.js" type="module"></script>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 		<script>
 			//htmx.logAll();
