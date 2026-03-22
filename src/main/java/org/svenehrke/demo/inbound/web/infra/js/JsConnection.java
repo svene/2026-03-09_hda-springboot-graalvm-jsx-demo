@@ -22,17 +22,17 @@ public class JsConnection {
 		ctx.eval("js", "var module = {exports:{}}; var exports = module.exports;");
 		ctx.eval(source);
 
-        // Resolve exports once
-        Value exports = ctx.getBindings("js")
-            .getMember("module")
-            .getMember("exports");
+		// Resolve exports once
+		Value exports = ctx.getBindings("js")
+			.getMember("module")
+			.getMember("exports");
 
-        for (String key : exports.getMemberKeys()) {
-            Value member = exports.getMember(key);
-            if (member.canExecute()) {
-                entryFunctions.put(key, member);
-            }
-        }
+		for (String key : exports.getMemberKeys()) {
+			Value member = exports.getMember(key);
+			if (member.canExecute()) {
+				entryFunctions.put(key, member);
+			}
+		}
 	}
 
 	public Value getEntryFunction(String name) {

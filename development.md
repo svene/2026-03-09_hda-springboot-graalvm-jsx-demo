@@ -42,3 +42,30 @@ public String page() {
 - Usually this means for each endpoint in the Controller there will be a
 corresponding function in `render.tsx`
 
+### Live reload for the browser
+During development the browser should automatically refresh when one of the tsx files is changed.
+
+This is achieved by using springs devtools:
+
+````xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-devtools</artifactId>
+  <scope>runtime</scope>
+  <optional>true</optional>
+</dependency>
+````
+... the following settings in `application-dev.properties`:
+````properties
+spring.devtools.restart.exclude=static/fe/**
+spring.devtools.livereload.enabled=true
+spring.devtools.restart.poll-interval=50
+spring.devtools.restart.quiet-period=10
+````
+
+and the following script entry in `layout.tsx`:
+````html
+  <script src="http://localhost:35729/livereload.js"></script>
+````
+(the last one can also be replaced by dedicated browser extensions)
+
