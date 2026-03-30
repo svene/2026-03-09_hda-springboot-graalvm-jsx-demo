@@ -21,20 +21,20 @@ public class JsxRenderer {
 		this.jsHolder = jsHolder;
 	}
 
-	public String render(String entryFunctionName, Object vm) {
-		log.info("rendering {}", entryFunctionName);
+	public String render(String route, Object vm) {
+		log.info("rendering {}", route);
 		JsConnection ctx = null;
 		try {
 			String vmJson = jsonMapper.writeValueAsString(vm);
 			ctx = jsHolder.jsConnectionPoolSupplier().get().borrow();
-			var result = ctx.getEntryFunction(entryFunctionName).execute(vmJson);
+			var result = ctx.getEntryFunction("render").execute(route, vmJson);
 			return result.asString();
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			throw new RuntimeException(e);
 		}
 		finally {
-			log.info("finished rendering {}", entryFunctionName);
+			log.info("finished rendering {}", route);
 			if (ctx != null) {
 				jsHolder.jsConnectionPoolSupplier().get().release(ctx);
 			}

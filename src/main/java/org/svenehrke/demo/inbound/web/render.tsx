@@ -7,31 +7,24 @@ import {PersondetailsCard} from "./persondetailscard";
 import {PersondetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
 
-export function renderPage(vmJson: string): string {
+export function render(route: string, vmJson: string): string {
 	const vm = JSON.parse(vmJson);
-	return renderToString(<Page vm={vm} />)
-}
-export function personDetails(vmJson: string): string {
-	const vm = JSON.parse(vmJson);
-	return renderToString(<PersonDetails vm={vm} />)
-}
-export function personRow(vmJson: string): string {
-	const vm = JSON.parse(vmJson);
-	return renderToString(<PersonRow vm={vm}/>)
-}
-export function personEdit(vmJson: string): string {
-	const vm = JSON.parse(vmJson);
-	return renderToString(<PersonEditor vm={vm}/>)
-}
-export function personDetailsCard(vmJson: string): string {
-	const vm = JSON.parse(vmJson);
-	return renderToString(<PersondetailsCard vm={vm}/>)
-}
-export function personDetailsRow(vmJson: string): string {
-	const vm = JSON.parse(vmJson);
-	return renderToString(<PersondetailsRow vm={vm} />)
-}
-export function personTable(vmJson: string): string {
-	const vm = JSON.parse(vmJson);
-	return renderToString(<PersonTable vm={vm} />)
+	switch (route) {
+		case 'page':
+			return renderToString(<Page vm={vm} />)
+		case 'personDetails':
+			return renderToString(<PersonDetails vm={vm} />)
+		case 'personRow':
+			return renderToString(<PersonRow vm={vm}/>)
+		case 'personEdit':
+			return renderToString(<PersonEditor vm={vm}/>)
+		case 'personDetailsCard':
+			return renderToString(<PersondetailsCard vm={vm}/>)
+		case 'personDetailsRow':
+			return renderToString(<PersondetailsRow vm={vm} />)
+		case 'personTable':
+			return renderToString(<PersonTable vm={vm} />)
+		default:
+			return renderToString(<div>{`ROUTE '${route}' NOT FOUND`}</div>)
+	}
 }

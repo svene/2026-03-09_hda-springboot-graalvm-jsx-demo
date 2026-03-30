@@ -31,7 +31,7 @@ public class PagesController {
 	public String page() {
 		// TODO: model.addAttribute("devMode", activeProfile.contains("dev"));
 		var vm = new PersonPageModel(peopleService.personTableModel());
-		return renderer.render("renderPage", vm);
+		return renderer.render("page", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS)
