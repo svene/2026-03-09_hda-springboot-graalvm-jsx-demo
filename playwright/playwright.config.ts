@@ -70,10 +70,21 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  /* Start a fresh Spring Boot instance before every test run so the
+     in-memory HSQLDB is always re-seeded from scratch.
+     reuseExistingServer: false kills any running instance first. */
+  /* Start a fresh Spring Boot instance before every test run so the
+     in-memory HSQLDB is always re-seeded from scratch.
+     reuseExistingServer: false kills any running instance first.
+     GraalVM is required for the JS/JSX polyglot engine. */
+  /* Build and start a fresh Spring Boot instance before every test run so the
+     in-memory HSQLDB is always re-seeded from scratch.
+     reuseExistingServer: false kills any running instance first.
+     GraalVM is required for the JS/JSX polyglot engine. */
+  webServer: {
+    command: `cd .. && npm run genjava && npm run build && JAVA_HOME=${process.env.HOME}/.sdkman/candidates/java/25.0.2-graal mvn package -q -DskipTests && ${process.env.HOME}/.sdkman/candidates/java/25.0.2-graal/bin/java -jar target/hda-springboot-graalvm-jsx-demo-1.0-SNAPSHOT.jar`,
+    url: 'http://localhost:8080',
+    reuseExistingServer: false,
+    timeout: 120_000,
+  },
 });
