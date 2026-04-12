@@ -15,6 +15,7 @@ test('has table', async ({ page }) => {
   await expect(page.locator('table thead tr button span').nth(1)).toHaveText('Delete');
   await expect(page.locator('table th')).toHaveText(['', 'Firstname', 'Lastname', 'Street', '']);
   await expect(page.locator('table tbody tr').nth(0).locator('td')).toHaveText([' ', 'Jackie', 'Rau', 'Waelchi Orchard', 'arrow_drop_down']);
+  //await expect(page).toHaveScreenshot();
 });
 
 
