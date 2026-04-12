@@ -8,7 +8,7 @@ export const Page = ({vm}: {vm: PersonPageModel}) => (
 		<div class="container mt-1">
 
 			<div class="p-1 mt-1 area-border" style="min-height: 500px">
-				<div class="field">
+				<div class="field" data-testid="search-field">
 					<label class="label">Search</label>
 					<div class="control">
 						<input
