@@ -1,67 +1,50 @@
-import {Project, SourceFile, Type} from "ts-morph";
+import { Type } from "ts-morph";
 import * as fs from "fs";
-import {SharedConstGeneratorOptions} from "./generator-options";
+import { SharedConstGeneratorOptions } from "./generator-options";
 
-function map(type: Type): string {
+function mapType(type: Type): string {
 	if (type.isString()) return "String";
 	if (type.isNumber()) return "int";
 	if (type.isBoolean()) return "boolean";
-
-	if (type.isArray()) {
-		return `List<${map(type.getArrayElementTypeOrThrow())}>`;
-	}
+	if (type.isArray()) return `List<${mapType(type.getArrayElementTypeOrThrow())}>`;
 
 	const aliasSymbol = type.getAliasSymbol();
-	if (aliasSymbol) {
-		return aliasSymbol.getName();
-	}
+	if (aliasSymbol) return aliasSymbol.getName();
+
 	const symbol = type.getSymbol();
 	if (symbol) return symbol.getName();
 
 	throw new Error(`Unsupported DTO type: ${type.getText()}`);
 }
 
-function genJavaRecordsFromHonoSourceFiles(sources: SourceFile[], javaPackage: string, outPath: string) {
-	fs.mkdirSync(outPath, { recursive: true });
+export function genJavaRecordsFromHonoTypes(options: SharedConstGeneratorOptions): void {
+	const { project, inputGlob, javaPackage, outputDir } = options;
 
-	console.log('----------- <Types> -----------')
-	for (const source of sources) {
+	fs.mkdirSync(outputDir, { recursive: true });
+
+	console.log('----------- <Types> -----------');
+	for (const source of project.addSourceFilesAtPaths(inputGlob)) {
 		for (const alias of source.getTypeAliases()) {
 			const name = alias.getName();
 			console.log(name);
+
+			let needsList = false;
 			const fields = alias.getType().getProperties().map(p => {
-				const t = p.getValueDeclarationOrThrow().getType();
-				return `    ${map(t)} ${p.getName()}`;
+				const javaType = mapType(p.getValueDeclarationOrThrow().getType());
+				if (javaType.startsWith("List<")) needsList = true;
+				return `    ${javaType} ${p.getName()}`;
 			});
 
-			const needsList = fields.some(f => f.includes("List<"));
+			const lines = [
+				`package ${javaPackage};`,
+				...(needsList ? [`import java.util.List;`, ``] : [``]),
+				`public record ${name}(`,
+				fields.join(",\n"),
+				`) {}`,
+			];
 
-			const java = `
-package ${javaPackage};
-${needsList ? "import java.util.List;\n" : "\n"}
-public record ${name}(
-${fields.join(",\n")}
-) {}
-`.trim();
-
-			fs.writeFileSync(`${outPath}/${name}.java`, java + "\n");
+			fs.writeFileSync(`${outputDir}/${name}.java`, lines.join("\n") + "\n");
 		}
 	}
-	console.log('----------- </Types> -----------')
+	console.log('----------- </Types> -----------');
 }
-
-export function genJavaRecordsFromHonoTypes(options: SharedConstGeneratorOptions) {
-	const {
-		tsConfigPath,
-		inputGlob,
-		javaPackage,
-		outputDir,
-	} = options;
-
-	const project = new Project({
-		tsConfigFilePath: tsConfigPath,
-	});
-	const sources: SourceFile[] = project.addSourceFilesAtPaths(inputGlob);
-	genJavaRecordsFromHonoSourceFiles(sources, javaPackage, outputDir);
-}
-

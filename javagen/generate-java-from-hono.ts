@@ -1,21 +1,11 @@
-import {genJavaRecordsFromHonoTypes} from "./generate-java-records";
-import {generateSharedConsts} from "./generate-shared-consts";
+import { Project } from "ts-morph";
+import { genJavaRecordsFromHonoTypes } from "./generate-java-records";
+import { generateSharedConsts } from "./generate-shared-consts";
 
-const javaPackage = `org.svenehrke.demo.inbound.web`;
-const outPath = `target/generated-sources/tsjava/${javaPackage.split(".").join("/")}`;
+const javaPackage = 'org.svenehrke.demo.inbound.web`;
+const outputDir = `target/generated-sources/tsjava/${javaPackage.replaceAll(".", "/")}`;
+const project = new Project({ tsConfigFilePath: 'tsconfig.json' });
+const options = { project, outputDir, javaPackage };
 
-genJavaRecordsFromHonoTypes({
-	tsConfigPath: './tsconfig.json',
-	inputGlob: 'src/main/java/**/*-vm.ts',
-	outputDir: outPath,
-	javaPackage: javaPackage,
-});
-
-generateSharedConsts({
-	tsConfigPath: 'tsconfig.json',
-	inputGlob: 'src/main/java/**/*shared-consts.ts',
-	outputDir: outPath,
-	javaPackage: javaPackage,
-});
-
-
+genJavaRecordsFromHonoTypes({ ...options, inputGlob: 'src/main/java/**/*-vm.ts' });
+generateSharedConsts({ ...options, inputGlob: 'src/main/java/**/*shared-consts.ts' });

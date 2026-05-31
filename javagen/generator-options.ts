@@ -1,5 +1,7 @@
+import { Project } from "ts-morph";
+
 export interface SharedConstGeneratorOptions {
-	tsConfigPath: string;
+	project: Project;
 	inputGlob: string | string[];
 	outputDir: string;
 	javaPackage: string;

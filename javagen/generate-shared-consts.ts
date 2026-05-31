@@ -1,29 +1,19 @@
 import {
-	Project,
 	Node,
-	SyntaxKind,
-	TemplateExpression,
+	ObjectLiteralExpression,
 	SourceFile,
+	TemplateExpression,
 } from "ts-morph";
 import * as path from "path";
 import * as fs from "fs";
-import {SharedConstGeneratorOptions} from "./generator-options";
+import { SharedConstGeneratorOptions } from "./generator-options";
 
 /* ======================================================
    Public API
    ====================================================== */
 
 export function generateSharedConsts(options: SharedConstGeneratorOptions): void {
-	const {
-		tsConfigPath,
-		inputGlob,
-		outputDir,
-		javaPackage,
-	} = options;
-
-	const project = new Project({
-		tsConfigFilePath: tsConfigPath,
-	});
+	const { project, inputGlob, outputDir, javaPackage } = options;
 
 	const sourceFiles = project.addSourceFilesAtPaths(inputGlob);
 
@@ -34,12 +24,12 @@ export function generateSharedConsts(options: SharedConstGeneratorOptions): void
 
 	fs.mkdirSync(outputDir, { recursive: true });
 
-	console.log('----------- <Constants> -----------')
+	console.log('----------- <Constants> -----------');
 	for (const sourceFile of sourceFiles) {
-		console.log(`${sourceFile.getBaseName().toString()}`)
+		console.log(sourceFile.getBaseName());
 		generateJavaForFile(sourceFile, outputDir, javaPackage);
 	}
-	console.log('----------- </Constants> -----------')
+	console.log('----------- </Constants> -----------');
 }
 
 /* ======================================================
@@ -51,89 +41,39 @@ function generateJavaForFile(
 	outputDir: string,
 	javaPackage: string
 ): void {
-	const tsFileName = path.basename(sourceFile.getFilePath());
-	const javaTypeName = toJavaTypeName(tsFileName);
-	const javaFilePath = path.join(outputDir, `${javaTypeName}.java`);
+	const javaTypeName = toJavaTypeName(path.basename(sourceFile.getFilePath()));
+	const lines: string[] = [`package ${javaPackage};`, "", `public interface ${javaTypeName} {`, ""];
 
-	const lines: string[] = [];
+	for (const stmt of sourceFile.getVariableStatements()) {
+		for (const decl of stmt.getDeclarations()) {
+			const init = decl.getInitializer();
+			if (!init) continue;
 
-	lines.push(`package ${javaPackage};`, "");
-	lines.push(`public interface ${javaTypeName} {`, "");
-
-	// ─────────────────────────────────────────────
-	// Top-level string constants
-	// ─────────────────────────────────────────────
-
-	sourceFile.getVariableDeclarations().forEach(decl => {
-		const init = decl.getInitializer();
-		if (!init) return;
-
-		if (Node.isStringLiteral(init)) {
-			lines.push(
-				...indent([
-					`String ${decl.getName()} = "${init.getLiteralText()}";`,
-				])
-			);
+			if (Node.isStringLiteral(init)) {
+				lines.push(...indent([`String ${decl.getName()} = "${init.getLiteralText()}";`]));
+			} else if (stmt.isExported() && Node.isObjectLiteralExpression(init)) {
+				lines.push(...emitNestedInterface(decl.getName(), init), "");
+			}
 		}
-	});
-
-	if (lines[lines.length - 1] !== "") {
-		lines.push("");
 	}
 
-	// ─────────────────────────────────────────────
-	// Exported object literals → nested interfaces
-	// ─────────────────────────────────────────────
-
-	sourceFile.getVariableStatements().forEach(stmt => {
-		if (!stmt.isExported()) return;
-
-		stmt.getDeclarations().forEach(decl => {
-			const obj = decl.getInitializerIfKind(
-				SyntaxKind.ObjectLiteralExpression
-			);
-			if (!obj) return;
-
-			lines.push(
-				...emitNestedInterface(decl.getName(), obj),
-				""
-			);
-		});
-	});
-
 	lines.push("}");
-
-	fs.writeFileSync(javaFilePath, lines.join("\n"), "utf8");
+	fs.writeFileSync(path.join(outputDir, `${javaTypeName}.java`), lines.join("\n"), "utf8");
 }
 
 /* ======================================================
    Nested interface emission
    ====================================================== */
 
-function emitNestedInterface(
-	interfaceName: string,
-	objectLiteral: any
-): string[] {
-	const lines: string[] = [];
+function emitNestedInterface(interfaceName: string, obj: ObjectLiteralExpression): string[] {
+	const lines: string[] = [`interface ${interfaceName} {`, ""];
 
-	lines.push(`interface ${interfaceName} {`, "");
-
-	objectLiteral.getProperties().forEach((prop: any) => {
-		if (!Node.isPropertyAssignment(prop)) return;
-
-		const key = prop.getName();
-		const init = prop.getInitializer();
-		if (!init) return;
-
-		const javaExpr = emitJavaExpression(init);
-
-		lines.push(
-			...indent([`String ${key} = ${javaExpr};`])
-		);
-	});
+	for (const prop of obj.getProperties()) {
+		if (!Node.isPropertyAssignment(prop)) continue;
+		lines.push(...indent([`String ${prop.getName()} = ${emitJavaExpression(prop.getInitializerOrThrow())};`]));
+	}
 
 	lines.push("}");
-
 	return indent(lines);
 }
 
@@ -141,38 +81,22 @@ function emitNestedInterface(
    Java expression emission
    ====================================================== */
 
-function emitJavaExpression(initializer: any): string {
-	if (Node.isStringLiteral(initializer)) {
-		return `"${initializer.getLiteralText()}"`;
-	}
-
-	if (Node.isTemplateExpression(initializer)) {
-		return emitTemplateExpression(initializer);
-	}
-
-	throw new Error(
-		`Unsupported initializer: ${initializer.getKindName()}`
-	);
+function emitJavaExpression(initializer: Node): string {
+	if (Node.isStringLiteral(initializer)) return `"${initializer.getLiteralText()}"`;
+	if (Node.isTemplateExpression(initializer)) return emitTemplateExpression(initializer);
+	throw new Error(`Unsupported initializer: ${initializer.getKindName()}`);
 }
 
 function emitTemplateExpression(expr: TemplateExpression): string {
 	const parts: string[] = [];
 
-	// head literal
 	const headText = expr.getHead().getLiteralText();
-	if (headText.length > 0) {
-		parts.push(`"${headText}"`);
-	}
+	if (headText.length > 0) parts.push(`"${headText}"`);
 
 	for (const span of expr.getTemplateSpans()) {
-		// ${EXPR}
 		parts.push(span.getExpression().getText());
-
-		// trailing literal
 		const literalText = span.getLiteral().getLiteralText();
-		if (literalText.length > 0) {
-			parts.push(`"${literalText}"`);
-		}
+		if (literalText.length > 0) parts.push(`"${literalText}"`);
 	}
 
 	return parts.join(" + ");
