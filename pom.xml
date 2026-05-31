@@ -66,12 +66,36 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+		<plugin>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-maven-plugin</artifactId>
+		</plugin>
 
-		</plugins>
+		<!-- Run 'npm run genjava' before compiling so generated Java sources are always up-to-date -->
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>exec-maven-plugin</artifactId>
+			<version>3.5.0</version>
+			<executions>
+				<execution>
+					<id>ts-to-java-codegen</id>
+					<phase>generate-sources</phase>
+					<goals>
+						<goal>exec</goal>
+					</goals>
+					<configuration>
+						<executable>npm</executable>
+						<arguments>
+							<argument>run</argument>
+							<argument>genjava</argument>
+						</arguments>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+
+	</plugins>
+
 	</build>
 
 	<dependencies>
