@@ -1,6 +1,6 @@
-import {HonoWebApiConsts} from "./hono-web-api-shared-consts";
 import {PersonTableModel} from "./vm/person-page-model-vm";
 import {PersonRow} from "./personrow";
+import {personActionUrls} from "./routes";
 
 export const PersonTable = ({vm}: { vm: PersonTableModel }) => (
 	<div id="result-table">
@@ -8,7 +8,7 @@ export const PersonTable = ({vm}: { vm: PersonTableModel }) => (
 			<thead>
 			<tr>
 				<td colSpan={5}>
-					<form id="bulkDeleteForm" hx-delete={HonoWebApiConsts.DELETE}>
+					<form id="bulkDeleteForm" hx-delete={personActionUrls.Delete.url()}>
 						<button type="submit" class="button">
 							<span class="icon"><i class="material-icons">delete</i></span>
 							<span>Delete</span>

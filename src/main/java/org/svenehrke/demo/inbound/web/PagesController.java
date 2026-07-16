@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.svenehrke.demo.core.PeopleService;
-import org.svenehrke.demo.inbound.web.HonoWebApiSharedConsts.HonoWebApiConsts;
 import org.svenehrke.demo.inbound.web.infra.js.JsxRenderer;
 
 import java.util.List;
@@ -15,6 +14,8 @@ import static org.svenehrke.demo.inbound.web.HTMXConsts.HX_REDIRECT;
 @RestController
 @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
 public class PagesController {
+
+	public static final String PAGE_URL = "/page";
 
 	private final PeopleService peopleService;
 	private final JsxRenderer renderer;
@@ -27,58 +28,63 @@ public class PagesController {
 		this.renderer = renderer;
 	}
 
-	@GetMapping(HonoWebApiConsts.PAGE)
+	@GetMapping("/page") // SPRING-HONO
 	public String page() {
 		// TODO: model.addAttribute("devMode", activeProfile.contains("dev"));
 		var vm = new PersonPageModel(peopleService.personTableModel());
 		return renderer.render("Page", vm);
 	}
 
-	@GetMapping(HonoWebApiConsts.PERSON_DETAILS)
+	@GetMapping("/person/{id}/details") // SPRING-HONO
 	public String details(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
 		return renderer.render("PersonDetails", vm);
 	}
 
-	@GetMapping(HonoWebApiConsts.PERSON_ROW)
+	@GetMapping("/person/{id}/row") // SPRING-HONO
 	public String row(@PathVariable int id) {
 		PersonTableRowModel vm = peopleService.personTableRowModel(id);
 		return renderer.render("PersonRow", vm);
 	}
 
-	@GetMapping(HonoWebApiConsts.PERSON_EDIT)
+	@GetMapping("/person/{id}/edit") // SPRING-HONO
 	public String edit(@PathVariable int id) {
 		PersonEditModel vm = peopleService.personEditModel(id);
 		return renderer.render("PersonEditor", vm);
 	}
 
-	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_CARD)
+	@GetMapping("/person/{id}/detailscard") // SPRING-HONO
 	public String detailsCard(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
 		return renderer.render("PersondetailsCard", vm);
 	}
 
-	@PutMapping(HonoWebApiConsts.PERSON)
+	@PutMapping("/person/{id}") // SPRING-HONO
 	public void updatePerson(@PathVariable int id, PersonEditModel personEditModel, HttpServletResponse response) {
 		peopleService.updatePerson(id, personEditModel);
 		response.setHeader(HTMXConsts.HX_TRIGGER, """
 			{"%s": {"id": %d}}\
-			""".formatted(HonoWebApiSharedConsts.EvtBackendEvents.PERSON_UPDATED, id));
+			""".formatted(PersonEvents.PERSON_UPDATED, id));
 	}
-	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_ROW)
+	@GetMapping("/person/{id}/detailsrow") // SPRING-HONO
 	public String detailsRow(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
 		return renderer.render("PersondetailsRow", vm);
 	}
 
-	@GetMapping(HonoWebApiConsts.PERSON_TABLE)
+	@GetMapping("/persontable") // SPRING-HONO
 	public String peopleUrl(@RequestParam() String search) {
 		PersonTableModel vm = peopleService.peopleForSearch(search);
 		return renderer.render("PersonTable", vm);
 	}
-	@DeleteMapping(HonoWebApiConsts.DELETE)
+	@DeleteMapping("/delete") // SPRING-HONO
 	public void deleteRows(@RequestParam List<Integer> selection, HttpServletResponse response) {
 		peopleService.deleteByIds(selection);
-		response.setHeader(HX_REDIRECT, HonoWebApiConsts.PAGE);
+		response.setHeader(HX_REDIRECT, PAGE_URL);
+	}
+
+	// SPRING-HONO: routes.tsx:personEvents
+	private static class PersonEvents {
+		public static  final String PERSON_UPDATED = "person-updated";
 	}
 }

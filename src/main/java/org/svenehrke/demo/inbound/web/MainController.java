@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 	@GetMapping("/")
 	public String redirectRoot() {
-		return "redirect:" + HonoWebApiSharedConsts.HonoWebApiConsts.PAGE;
+		return "redirect:" + PagesController.PAGE_URL;
 	}
 }

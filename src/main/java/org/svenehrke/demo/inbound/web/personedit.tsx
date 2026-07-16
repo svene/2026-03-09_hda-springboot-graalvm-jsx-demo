@@ -1,7 +1,5 @@
 import {PersonEditModel} from "./vm/person-page-model-vm";
-import {updateUrl} from "./route-builder";
-import {EvtBackendEvents} from "./hono-web-api-shared-consts";
-import {personRoutes} from "./routes";
+import {personActionUrls, personEvents, personRoutes} from "./routes";
 
 export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 	<tr id={`row-${vm.id}-edit`}>
@@ -15,7 +13,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 		></template>
 		<template
 			hx-trigger={`
-			${EvtBackendEvents.PERSON_UPDATED}[event.detail.id === ${vm.id}] from:closest tr
+			${personEvents.PERSON_UPDATED}[event.detail.id === ${vm.id}] from:closest tr
 			`}
 			hx-target="closest tr"
 			hx-swap="outerHTML"
@@ -62,7 +60,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 							type="submit"
 							class="level-item button is-primary"
 							hx-trigger="click consume"
-							hx-put={updateUrl(vm.id)} /* Expects backend to respond with 'person-updated'(id) event */
+							hx-put={personActionUrls.UpdatePerson.url(vm.id)} /* Expects backend to respond with 'person-updated'(id) event */
 							hx-swap="none" /* Works with event handling of 'person-updated' */
 						>Save
 						</button>

@@ -1,6 +1,5 @@
 import {PersonDetailModel} from "./vm/person-page-model-vm";
-import {EvtBackendEvents} from "./hono-web-api-shared-consts";
-import {personRoutes} from "./routes";
+import {personEvents, personRoutes} from "./routes";
 
 export const PersondetailsRow = ({vm}: { vm: PersonDetailModel }) => (
 		<>
@@ -16,7 +15,7 @@ export const PersondetailsRow = ({vm}: { vm: PersonDetailModel }) => (
 					hx-get={personRoutes.PersonRow.url(vm.id)}
 				></template>
 				<template
-					hx-trigger={`${EvtBackendEvents.PERSON_UPDATED}[event.detail.id == ${vm.id}] from:body`}
+					hx-trigger={`${personEvents.PERSON_UPDATED}[event.detail.id == ${vm.id}] from:body`}
 					hx-target="closest tr"
 					hx-swap="outerHTML"
 					hx-get={personRoutes.PersondetailsRow.url(vm.id)}

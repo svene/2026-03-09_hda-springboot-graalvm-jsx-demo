@@ -264,8 +264,6 @@ The controller imports the generated constants and uses them directly as mapping
 ```java
 // PagesController.java
 
-import org.svenehrke.demo.inbound.web.HonoWebApiSharedConsts.HonoWebApiConsts;
-
 @GetMapping(HonoWebApiConsts.PERSON_DETAILS)          // "/person/{id}/details"
 public String details(@PathVariable int id) {
     PersonDetailModel vm = peopleService.personDetailModel(id);
