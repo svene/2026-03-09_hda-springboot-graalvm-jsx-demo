@@ -1,5 +1,5 @@
 import {PersonDetailModel} from "./vm/person-page-model-vm";
-import {editUrl} from "./route-builder";
+import {personRoutes} from "./routes";
 
 export const PersondetailsCard = ({vm}: { vm: PersonDetailModel }) => (
 		<>
@@ -9,7 +9,7 @@ export const PersondetailsCard = ({vm}: { vm: PersonDetailModel }) => (
 				hx-trigger="click"
 				hx-target="this"
 				hx-swap="outerHTML"
-				hx-get={editUrl(vm.id)}
+				hx-get={personRoutes.PersonEditor.url(vm.id)}
 				_={`on 'close-details-requested'(id) from <body/> if id == ${vm.id} remove me end`}
 			>
 				<td colSpan={5} style="padding-left: 30px">

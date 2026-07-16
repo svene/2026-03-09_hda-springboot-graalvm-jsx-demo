@@ -1,6 +1,7 @@
 import {PersonEditModel} from "./vm/person-page-model-vm";
-import {detailsCardUrl, updateUrl} from "./route-builder";
+import {updateUrl} from "./route-builder";
 import {EvtBackendEvents} from "./hono-web-api-shared-consts";
+import {personRoutes} from "./routes";
 
 export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 	<tr id={`row-${vm.id}-edit`}>
@@ -10,7 +11,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 			`}
 			hx-target="closest tr"
 			hx-swap="outerHTML"
-			hx-get={detailsCardUrl(vm.id)}
+			hx-get={personRoutes.PersondetailsCard.url(vm.id)}
 		></template>
 		<template
 			hx-trigger={`
@@ -18,7 +19,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 			`}
 			hx-target="closest tr"
 			hx-swap="outerHTML"
-			hx-get={detailsCardUrl(vm.id)}
+			hx-get={personRoutes.PersondetailsCard.url(vm.id)}
 		></template>
 		<td colSpan={4} style="padding: 0px">
 			<div class="card p-5 my-2">

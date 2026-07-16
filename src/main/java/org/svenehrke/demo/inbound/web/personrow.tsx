@@ -1,5 +1,5 @@
 import {PersonTableRowModel} from "./vm/person-page-model-vm";
-import {detailsUrl} from "./route-builder";
+import {personRoutes} from "./routes";
 
 export const PersonRow = ({vm}: {vm: PersonTableRowModel}) => (
 	<tr
@@ -8,7 +8,7 @@ export const PersonRow = ({vm}: {vm: PersonTableRowModel}) => (
 		hx-trigger="click"
 		hx-target="this"
 		hx-swap="outerHTML"
-		hx-get={detailsUrl(vm.id)}
+		hx-get={personRoutes.PersonDetails.url(vm.id)}
 	>
 		<td hx-trigger="click consume"> {/* consume: prevent bubbling, only checkbox needs to be clicked, not parents*/}
 			<input type="checkbox" name="selection" value={vm.id} form="bulkDeleteForm"></input>

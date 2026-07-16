@@ -1,7 +1,7 @@
 import {Layout} from "./layout";
 import {PersonPageModel} from "./vm/person-page-model-vm";
-import {HonoWebApiConsts} from "./hono-web-api-shared-consts";
 import {PersonTable} from "./persontable";
+import {personRoutes} from "./routes";
 
 export const Page = ({vm}: {vm: PersonPageModel}) => (
 	<Layout>
@@ -17,7 +17,7 @@ export const Page = ({vm}: {vm: PersonPageModel}) => (
 							name="search"
 							placeholder="Search for firstname or lastname"
 							hx-trigger="input changed delay:500ms"
-							hx-get={HonoWebApiConsts.PERSON_TABLE}
+							hx-get={personRoutes.PersonTable.url()}
 							hx-target="#result-table"
 						/>
 					</div>
