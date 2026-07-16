@@ -31,25 +31,25 @@ public class PagesController {
 	public String page() {
 		// TODO: model.addAttribute("devMode", activeProfile.contains("dev"));
 		var vm = new PersonPageModel(peopleService.personTableModel());
-		return renderer.render("page", vm);
+		return renderer.render("Page", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS)
 	public String details(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
-		return renderer.render("personDetails", vm);
+		return renderer.render("PersonDetails", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_ROW)
 	public String row(@PathVariable int id) {
 		PersonTableRowModel vm = peopleService.personTableRowModel(id);
-		return renderer.render("personRow", vm);
+		return renderer.render("PersonRow", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_EDIT)
 	public String edit(@PathVariable int id) {
 		PersonEditModel vm = peopleService.personEditModel(id);
-		return renderer.render("personEdit", vm);
+		return renderer.render("PersonEditor", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_CARD)
@@ -68,13 +68,13 @@ public class PagesController {
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_ROW)
 	public String detailsRow(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
-		return renderer.render("personDetailsRow", vm);
+		return renderer.render("PersondetailsRow", vm);
 	}
 
 	@GetMapping(HonoWebApiConsts.PERSON_TABLE)
 	public String peopleUrl(@RequestParam() String search) {
 		PersonTableModel vm = peopleService.peopleForSearch(search);
-		return renderer.render("personTable", vm);
+		return renderer.render("PersonTable", vm);
 	}
 	@DeleteMapping(HonoWebApiConsts.DELETE)
 	public void deleteRows(@RequestParam List<Integer> selection, HttpServletResponse response) {
