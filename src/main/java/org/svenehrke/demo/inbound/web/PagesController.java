@@ -55,7 +55,7 @@ public class PagesController {
 	@GetMapping(HonoWebApiConsts.PERSON_DETAILS_CARD)
 	public String detailsCard(@PathVariable int id) {
 		PersonDetailModel vm = peopleService.personDetailModel(id);
-		return renderer.render("personDetailsCard", vm);
+		return renderer.render("PersondetailsCard", vm);
 	}
 
 	@PutMapping(HonoWebApiConsts.PERSON)
