@@ -28,52 +28,31 @@ const componentUrl = (name: string, id: number) => `/component/${name}?id=${id}`
 export const personRoutes = {
 	Page: { // SPRING-HONO
 		url: () => `/page`, // SPRING-HONO
-		render: (vmJson: string) => {
-			const vm = JSON.parse(vmJson);
-			return renderToString(<Page vm={vm} />);
-		}
+		render: (vm: any) => renderToString(<Page vm={vm}/>)
 	},
 	PersonTable: { // SPRING-HONO
 		url: () => componentUrl('PersonTable', 0), // SPRING-HONO
-		render: (vmJson: string) => {
-			const vm = JSON.parse(vmJson);
-			return renderToString(<PersonTable vm={vm}/>);
-		}
+		render: (vm: any) => renderToString(<PersonTable vm={vm}/>)
 	},
 	PersonDetails: { // SPRING-HONO
 		url: (id: number) => componentUrl('PersonDetails', id), // SPRING-HONO
-		render: (vmJson: string) => {
-			const vm = JSON.parse(vmJson);
-			return renderToString(<PersonDetails vm={vm} />);
-		}
+		render: (vm: any) => renderToString(<PersonDetails vm={vm}/>)
 	},
 	PersonRow: { // SPRING-HONO
 		url: (id: number) => componentUrl('PersonRow', id), // SPRING-HONO
-		render: (vmJson: string) => {
-			const vm = JSON.parse(vmJson);
-			return renderToString(<PersonRow vm={vm}/>);
-		}
+		render: (vm: any) => renderToString(<PersonRow vm={vm}/>)
 	},
 	PersonEditor: { // SPRING-HONO
 		url: (id: number) => componentUrl('PersonEditor', id), // SPRING-HONO
-		render: (vmJson: string) => {
-			const vm = JSON.parse(vmJson);
-			return renderToString(<PersonEditor vm={vm}/>);
-		}
+		render: (vm: any) => renderToString(<PersonEditor vm={vm}/>)
 	},
 	PersondetailsCard: { // SPRING-HONO
 		url: (id: number) => componentUrl('PersondetailsCard', id), // SPRING-HONO
-		render: (vmJson: string) => {
-			const vm = JSON.parse(vmJson);
-			return renderToString(<PersondetailsCard vm={vm}/>);
-		}
+		render: (vm: any) => renderToString(<PersondetailsCard vm={vm}/>)
 	},
 	PersondetailsRow: { // SPRING-HONO
 		url: (id: number) => componentUrl('PersondetailsRow', id), // SPRING-HONO
-		render: (vmJson: string) => {
-			const vm = JSON.parse(vmJson);
-			return renderToString(<PersondetailsRow vm={vm}/>);
-		}
+		render: (vm: any) => renderToString(<PersondetailsRow vm={vm}/>)
 	},
 } satisfies Record<string, RouteDefinition>;
 

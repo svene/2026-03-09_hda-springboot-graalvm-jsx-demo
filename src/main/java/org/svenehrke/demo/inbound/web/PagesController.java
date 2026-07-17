@@ -39,12 +39,11 @@ public class PagesController {
 	@GetMapping("/component/{name}") // SPRING-HONO
 	public String component(@PathVariable String name, @RequestParam("id") int id, HttpServletRequest request) {
 		Object vm = switch (name) {
-			case "PersonDetails" -> peopleService.personDetailModel(id);
+			case "PersonDetails", "PersondetailsCard", "PersondetailsRow"
+				-> peopleService.personDetailModel(id);
 			case "PersonTable" -> peopleService.peopleForSearch(request.getParameter("search"));
 			case "PersonRow" -> peopleService.personTableRowModel(id);
 			case "PersonEditor" -> peopleService.personEditModel(id);
-			case "PersondetailsCard" -> peopleService.personDetailModel(id);
-			case "PersondetailsRow" -> peopleService.personDetailModel(id);
 			default -> null;
 		};
 		return renderer.render(name, vm);

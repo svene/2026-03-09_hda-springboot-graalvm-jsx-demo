@@ -9,7 +9,8 @@ export function render(route: string, vmJson: string): string {
 
 	const routeDefinition = routeDefinitions[route];
 	if (routeDefinition) {
-		return routeDefinition.render(vmJson);
+		const vm = JSON.parse(vmJson);
+		return routeDefinition.render(vm);
 	} else {
 		return renderToString(<div>{`ROUTE '${route}' NOT FOUND`}</div>)
 	}
