@@ -1,5 +1,6 @@
 package org.svenehrke.demo.inbound.web;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -35,28 +36,18 @@ public class PagesController {
 		return renderer.render("Page", vm);
 	}
 
-	@GetMapping("/person/{id}/details") // SPRING-HONO
-	public String details(@PathVariable int id) {
-		PersonDetailModel vm = peopleService.personDetailModel(id);
-		return renderer.render("PersonDetails", vm);
-	}
-
-	@GetMapping("/person/{id}/row") // SPRING-HONO
-	public String row(@PathVariable int id) {
-		PersonTableRowModel vm = peopleService.personTableRowModel(id);
-		return renderer.render("PersonRow", vm);
-	}
-
-	@GetMapping("/person/{id}/edit") // SPRING-HONO
-	public String edit(@PathVariable int id) {
-		PersonEditModel vm = peopleService.personEditModel(id);
-		return renderer.render("PersonEditor", vm);
-	}
-
-	@GetMapping("/person/{id}/detailscard") // SPRING-HONO
-	public String detailsCard(@PathVariable int id) {
-		PersonDetailModel vm = peopleService.personDetailModel(id);
-		return renderer.render("PersondetailsCard", vm);
+	@GetMapping("/component/{name}") // SPRING-HONO
+	public String component(@PathVariable String name, @RequestParam("id") int id, HttpServletRequest request) {
+		Object vm = switch (name) {
+			case "PersonDetails" -> peopleService.personDetailModel(id);
+			case "PersonTable" -> peopleService.peopleForSearch(request.getParameter("search"));
+			case "PersonRow" -> peopleService.personTableRowModel(id);
+			case "PersonEditor" -> peopleService.personEditModel(id);
+			case "PersondetailsCard" -> peopleService.personDetailModel(id);
+			case "PersondetailsRow" -> peopleService.personDetailModel(id);
+			default -> null;
+		};
+		return renderer.render(name, vm);
 	}
 
 	@PutMapping("/person/{id}") // SPRING-HONO
@@ -65,17 +56,6 @@ public class PagesController {
 		response.setHeader(HTMXConsts.HX_TRIGGER, """
 			{"%s": {"id": %d}}\
 			""".formatted(PersonEvents.PERSON_UPDATED, id));
-	}
-	@GetMapping("/person/{id}/detailsrow") // SPRING-HONO
-	public String detailsRow(@PathVariable int id) {
-		PersonDetailModel vm = peopleService.personDetailModel(id);
-		return renderer.render("PersondetailsRow", vm);
-	}
-
-	@GetMapping("/persontable") // SPRING-HONO
-	public String peopleUrl(@RequestParam() String search) {
-		PersonTableModel vm = peopleService.peopleForSearch(search);
-		return renderer.render("PersonTable", vm);
 	}
 	@DeleteMapping("/delete") // SPRING-HONO
 	public void deleteRows(@RequestParam List<Integer> selection, HttpServletResponse response) {

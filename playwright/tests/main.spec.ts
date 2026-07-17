@@ -8,11 +8,11 @@ const FIRST_PERSON = { firstName: 'Jackie', lastName: 'Rau', street: 'Waelchi Or
 
 // URL predicates — use exact-suffix regex to avoid false matches between
 // /details, /detailsrow and /detailscard
-const isDetailsUrl     = (url: string) => /\/person\/\d+\/details$/.test(url);
-const isDetailsRowUrl  = (url: string) => /\/person\/\d+\/detailsrow$/.test(url);
-const isDetailsCardUrl = (url: string) => /\/person\/\d+\/detailscard$/.test(url);
-const isEditUrl        = (url: string) => /\/person\/\d+\/edit$/.test(url);
-const isRowUrl         = (url: string) => /\/person\/\d+\/row$/.test(url);
+const isDetailsUrl     = (url: string) => /\/component\/PersonDetails/.test(url);
+const isDetailsRowUrl  = (url: string) => /\/component\/PersondetailsRow/.test(url);
+const isDetailsCardUrl = (url: string) => /\/component\/PersondetailsCard/.test(url);
+const isEditUrl        = (url: string) => /\/component\/PersonEditor/.test(url);
+const isRowUrl         = (url: string) => /\/component\/PersonRow/.test(url);
 
 test('has title', async ({ page }) => {
   await page.goto(BASE_URL + '/');
@@ -45,7 +45,7 @@ test('search filters the table', async ({ page }) => {
 
   const searchInput = page.locator('input[name="search"]');
   await Promise.all([
-    page.waitForResponse(resp => resp.url().includes('/persontable')),
+    page.waitForResponse(resp => resp.url().includes('/component/PersonTable')),
     searchInput.fill(FIRST_PERSON.firstName),
   ]);
 
@@ -67,11 +67,11 @@ test('clearing search restores full list', async ({ page }) => {
 
   const searchInput = page.locator('input[name="search"]');
   await Promise.all([
-    page.waitForResponse(resp => resp.url().includes('/persontable')),
+    page.waitForResponse(resp => resp.url().includes('/component/PersonTable')),
     searchInput.fill(FIRST_PERSON.firstName),
   ]);
   await Promise.all([
-    page.waitForResponse(resp => resp.url().includes('/persontable')),
+    page.waitForResponse(resp => resp.url().includes('/component/PersonTable')),
     searchInput.clear(),
   ]);
 

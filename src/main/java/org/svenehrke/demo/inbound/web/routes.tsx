@@ -8,6 +8,8 @@ import {PersonEditor} from "./personedit";
 import {PersondetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
 
+const componentUrl = (name: string, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
+
 /**
  * TODO: verify this comment:
  * These constants have two main purposes:
@@ -32,42 +34,42 @@ export const personRoutes = {
 		}
 	},
 	PersonTable: { // SPRING-HONO
-		url: () => `/persontable`, // SPRING-HONO
+		url: () => componentUrl('PersonTable', 0), // SPRING-HONO
 		render: (vmJson: string) => {
 			const vm = JSON.parse(vmJson);
 			return renderToString(<PersonTable vm={vm}/>);
 		}
 	},
 	PersonDetails: { // SPRING-HONO
-		url: (id: number) => `/person/${id}/details`, // SPRING-HONO
+		url: (id: number) => componentUrl('PersonDetails', id), // SPRING-HONO
 		render: (vmJson: string) => {
 			const vm = JSON.parse(vmJson);
 			return renderToString(<PersonDetails vm={vm} />);
 		}
 	},
 	PersonRow: { // SPRING-HONO
-		url: (id: number) => `/person/${id}/row`, // SPRING-HONO
+		url: (id: number) => componentUrl('PersonRow', id), // SPRING-HONO
 		render: (vmJson: string) => {
 			const vm = JSON.parse(vmJson);
 			return renderToString(<PersonRow vm={vm}/>);
 		}
 	},
 	PersonEditor: { // SPRING-HONO
-		url: (id: number) => `/person/${id}/edit`, // SPRING-HONO
+		url: (id: number) => componentUrl('PersonEditor', id), // SPRING-HONO
 		render: (vmJson: string) => {
 			const vm = JSON.parse(vmJson);
 			return renderToString(<PersonEditor vm={vm}/>);
 		}
 	},
 	PersondetailsCard: { // SPRING-HONO
-		url: (id: number) => `/person/${id}/detailscard`, // SPRING-HONO
+		url: (id: number) => componentUrl('PersondetailsCard', id), // SPRING-HONO
 		render: (vmJson: string) => {
 			const vm = JSON.parse(vmJson);
 			return renderToString(<PersondetailsCard vm={vm}/>);
 		}
 	},
 	PersondetailsRow: { // SPRING-HONO
-		url: (id: number) => `/person/${id}/detailsrow`, // SPRING-HONO
+		url: (id: number) => componentUrl('PersondetailsRow', id), // SPRING-HONO
 		render: (vmJson: string) => {
 			const vm = JSON.parse(vmJson);
 			return renderToString(<PersondetailsRow vm={vm}/>);
@@ -88,3 +90,4 @@ export const personActionUrls = {
 export const personEvents = {
 	PERSON_UPDATED: 'person-updated',
 }
+
