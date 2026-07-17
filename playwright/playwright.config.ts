@@ -82,7 +82,7 @@ export default defineConfig({
      reuseExistingServer: false kills any running instance first.
      GraalVM is required for the JS/JSX polyglot engine. */
   webServer: {
-    command: `cd .. && npm run genjava && npm run build && JAVA_HOME=${process.env.HOME}/.sdkman/candidates/java/25.0.2-graal mvn package -q -DskipTests && ${process.env.HOME}/.sdkman/candidates/java/25.0.2-graal/bin/java -jar target/hda-springboot-graalvm-jsx-demo-1.0-SNAPSHOT.jar`,
+    command: `cd .. && npm run build && JAVA_HOME=${process.env.HOME}/.sdkman/candidates/java/25.0.2-graal mvn package -q -DskipTests && ${process.env.HOME}/.sdkman/candidates/java/25.0.2-graal/bin/java -jar target/hda-springboot-graalvm-jsx-demo-1.0-SNAPSHOT.jar`,
     url: 'http://localhost:8080',
     reuseExistingServer: false,
     timeout: 120_000,
