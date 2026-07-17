@@ -1,8 +1,6 @@
 package org.svenehrke.demo.inbound.web;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.svenehrke.demo.core.PeopleService;
