@@ -14,7 +14,7 @@ import static org.svenehrke.demo.inbound.web.HTMXConsts.HX_REDIRECT;
 
 @RestController
 @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
-public class PagesController {
+public class PersonComponentController {
 
 	public static final String PAGE_URL = "/page";
 
@@ -24,7 +24,7 @@ public class PagesController {
 	@Value("${spring.profiles.active:}")
 	private String activeProfile;
 
-	public PagesController(PeopleService peopleService, JsxRenderer renderer) {
+	public PersonComponentController(PeopleService peopleService, JsxRenderer renderer) {
 		this.peopleService = peopleService;
 		this.renderer = renderer;
 	}

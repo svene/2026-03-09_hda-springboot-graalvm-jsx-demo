@@ -18,7 +18,7 @@ const componentUrl = (name: string, id: number) => `/component/${name}?id=${id}`
  *    See `hx-get={detailsUrl(vm.id)}` in `personrow.tsx` as an example.
  *
  * 2. For the Controller-Endpoints in the Java-Spring part.
- *    See PagesController.java on how they are used.
+ *    See PersonComponentController.java on how they are used.
  *    Note that the Java-Constants used in the Controller are generated
  *    from the constants here in this file.
  *    The generator code is located in the folder `javagen`.
@@ -65,7 +65,7 @@ export const personActionUrls = {
 	},
 } satisfies Record<string, ActionUrlDefinition>;
 
-// SPRING-HONO: PagesController.EvtBackendEvents
+// SPRING-HONO: PersonComponentController.EvtBackendEvents
 export const personEvents = {
 	PERSON_UPDATED: 'person-updated',
 }

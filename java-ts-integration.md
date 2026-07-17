@@ -262,7 +262,7 @@ public interface HonoWebApiSharedConsts {
 The controller imports the generated constants and uses them directly as mapping annotations and response header values:
 
 ```java
-// PagesController.java
+// PersonComponentController.java
 
 @GetMapping(HonoWebApiConsts.PERSON_DETAILS)          // "/person/{id}/details"
 public String details(@PathVariable int id) {
