@@ -1,4 +1,4 @@
-import {PersonDetailModel} from "./vm/person-page-model-vm";
+import {PersonDetailModel} from "./generated/types/vm-types";
 import {personRoutes} from "./routes";
 
 export const PersondetailsCard = ({vm}: { vm: PersonDetailModel }) => (

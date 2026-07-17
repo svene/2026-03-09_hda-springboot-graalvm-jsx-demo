@@ -322,7 +322,7 @@ The view model types are imported into JSX components as TypeScript types:
 
 ```tsx
 // persondetails.tsx
-import type {PersonDetailModel} from "./vm/person-page-model-vm";
+import type {PersonDetailModel} from "./generated/types/vm-types";
 
 export function PersonDetails({vm}: {vm: PersonDetailModel}) {
     return <div>{vm.firstName} {vm.lastName}</div>;
@@ -362,7 +362,7 @@ GraalVM Context
         │  JSON.parse(jsonString)
         ▼
 persondetails.tsx
-  import type {PersonDetailModel} from "./vm/person-page-model-vm"  ← same TS source
+  import type {PersonDetailModel} from "./generated/types/vm-types"  ← same TS source
   function PersonDetails({vm}: {vm: PersonDetailModel}) { ... }
 ```
 

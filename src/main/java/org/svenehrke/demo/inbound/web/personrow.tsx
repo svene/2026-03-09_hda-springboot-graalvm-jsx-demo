@@ -1,4 +1,4 @@
-import {PersonTableRowModel} from "./vm/person-page-model-vm";
+import {PersonTableRowModel} from "./generated/types/vm-types";
 import {personRoutes} from "./routes";
 
 export const PersonRow = ({vm}: {vm: PersonTableRowModel}) => (

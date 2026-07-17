@@ -1,4 +1,4 @@
-import {PersonEditModel} from "./vm/person-page-model-vm";
+import {PersonEditModel} from "./generated/types/vm-types";
 import {personActionUrls, personEvents, personRoutes} from "./routes";
 
 export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (

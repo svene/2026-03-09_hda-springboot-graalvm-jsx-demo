@@ -71,28 +71,31 @@
 			<artifactId>spring-boot-maven-plugin</artifactId>
 		</plugin>
 
-		<!-- Run 'npm run genjava' before compiling so generated Java sources are always up-to-date -->
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>exec-maven-plugin</artifactId>
-			<version>3.5.0</version>
-			<executions>
-				<execution>
-					<id>ts-to-java-codegen</id>
-					<phase>generate-sources</phase>
-					<goals>
-						<goal>exec</goal>
-					</goals>
-					<configuration>
-						<executable>npm</executable>
-						<arguments>
-							<argument>run</argument>
-							<argument>genjava</argument>
-						</arguments>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
+			<plugin>
+				<groupId>cz.habarta.typescript-generator</groupId>
+				<artifactId>typescript-generator-maven-plugin</artifactId>
+				<version>4.1.1</version>
+				<executions>
+					<execution>
+						<id>generate</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<phase>process-classes</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<jsonLibrary>jackson2</jsonLibrary>
+					<classPatterns>
+						<pattern>org.svenehrke.demo.inbound.**.*Model</pattern>
+						<pattern>org.svenehrke.demo.inbound.**.*VM</pattern>
+					</classPatterns>
+					<outputFile>${project.basedir}/src/main/java/org/svenehrke/demo/inbound/web/generated/types/vm-types.d.ts</outputFile>
+					<outputFileType>declarationFile</outputFileType>
+					<outputKind>module</outputKind>
+					<mapClasses>asInterfaces</mapClasses>
+				</configuration>
+			</plugin>
 
 	</plugins>
 

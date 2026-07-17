@@ -1,4 +1,4 @@
-import {PersonTableModel} from "./vm/person-page-model-vm";
+import {PersonTableModel} from "./generated/types/vm-types";
 import {PersonRow} from "./personrow";
 import {personActionUrls} from "./routes";
 

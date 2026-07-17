@@ -1,5 +1,5 @@
-import {PersonDetailModel} from "./vm/person-page-model-vm";
 import {personEvents, personRoutes} from "./routes";
+import {PersonDetailModel} from "./generated/types/vm-types";
 
 export const PersondetailsRow = ({vm}: { vm: PersonDetailModel }) => (
 		<>

@@ -40,3 +40,4 @@ build/
 # Custom
 /node_modules/
 /localonly/
+/src/main/java/org/svenehrke/demo/inbound/web/generated/
