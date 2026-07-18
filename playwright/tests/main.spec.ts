@@ -213,13 +213,13 @@ test('saving an edit updates the row in the table', async ({ page }) => {
   await firstNameInput.fill(newFirstName);
 
   // Register the detailsrow listener BEFORE clicking Save so we cannot miss the
-  // response that fires immediately after the PUT (via the person-updated HTMX event).
+  // response that fires immediately after the PUT (via the PERSON_UPDATED HTMX event).
   const detailsRowResponse = page.waitForResponse(resp => isDetailsRowUrl(resp.url()));
   await Promise.all([
     page.waitForResponse(resp => resp.request().method() === 'PUT' && resp.url().includes('/person/')),
     page.locator('table tbody tr').nth(1).locator('button', { hasText: 'Save' }).click(),
   ]);
-  // After the PUT the backend fires a person-updated event; PersondetailsRow reloads itself
+  // After the PUT the backend fires a PERSON_UPDATED event; PersondetailsRow reloads itself
   await detailsRowResponse;
 
   // The header row should reflect the updated name

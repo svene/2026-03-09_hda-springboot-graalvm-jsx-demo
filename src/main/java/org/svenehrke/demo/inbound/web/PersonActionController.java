@@ -36,7 +36,7 @@ public class PersonActionController {
 		peopleService.updatePerson(id, personEditModel);
 		response.setHeader(HTMXConsts.HX_TRIGGER, """
 			{"%s": {"id": %d}}\
-			""".formatted(PersonEvents.PERSON_UPDATED, id));
+			""".formatted(PersonEventName.PERSON_UPDATED.name(), id));
 	}
 	@DeleteMapping("/delete") // SPRING-HONO
 	public void deleteRows(@RequestParam List<Integer> selection, HttpServletResponse response) {
@@ -44,8 +44,4 @@ public class PersonActionController {
 		response.setHeader(HX_REDIRECT, PAGE_URL);
 	}
 
-	// SPRING-HONO: routes.tsx:personEvents
-	private static class PersonEvents {
-		public static  final String PERSON_UPDATED = "person-updated";
-	}
 }

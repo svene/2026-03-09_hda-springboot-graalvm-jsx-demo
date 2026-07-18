@@ -7,7 +7,7 @@ import {PersonRow} from "./personrow";
 import {PersonEditor} from "./personedit";
 import {PersondetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
-import {PersonRouteName} from "./generated/types/vm-types";
+import {PersonEventName, PersonRouteName} from "./generated/types/vm-types";
 
 const componentUrl = (name: PersonRouteName, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
 
@@ -67,7 +67,7 @@ export const personActionUrls = {
 } satisfies Record<string, ActionUrlDefinition>;
 
 // SPRING-HONO: PersonComponentController.EvtBackendEvents
-export const personEvents = {
-	PERSON_UPDATED: 'person-updated',
-}
+export const personEvents = { // TODO: is there a better way ?
+	PERSON_UPDATED: 'PERSON_UPDATED',
+} satisfies Record<PersonEventName, PersonEventName>;
 

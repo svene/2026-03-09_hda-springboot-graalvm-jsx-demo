@@ -162,8 +162,8 @@ UI interactions use a combination of HTMX (server round-trips) and Hyperscript (
 
 **Example — saving an edit:**
 1. Save button fires HTMX `PUT /person/{id}` with `hx-swap="none"`
-2. Java controller sets response header `HX-Trigger: {"person-updated": {"id": 5}}`
-3. HTMX dispatches a `person-updated` DOM event with `{id: 5}`
+2. Java controller sets response header `HX-Trigger: {"PERSON_UPDATED": {"id": 5}}`
+3. HTMX dispatches a `PERSON_UPDATED` DOM event with `{id: 5}`
 4. A `<template>` inside the matching row listens for this event and fires `hx-get` to re-fetch the updated row
 
 `HTMXConsts.java` holds the response header name constants used in the controllers.

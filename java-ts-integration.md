@@ -54,9 +54,9 @@ export const HonoWebApiConsts = {
     DELETE:             `${BASE}/delete`,
 };
 
-export const EvtBackendEvents = {
-    PERSON_UPDATED: 'person-updated',
-};
+export const personEvents = { // TODO: is there a better way ?
+   PERSON_UPDATED: 'PERSON_UPDATED',
+} satisfies Record<PersonEventName, PersonEventName>;
 ```
 
 The `BASE` constant is intentionally empty here but allows prefixing all routes at once (e.g. for a context path) by changing a single string.
@@ -225,9 +225,9 @@ export const HonoWebApiConsts = {
     // ...
 };
 
-export const EvtBackendEvents = {
-    PERSON_UPDATED: 'person-updated',
-};
+export const personEvents = { // TODO: is there a better way ?
+   PERSON_UPDATED: 'PERSON_UPDATED',
+} satisfies Record<PersonEventName, PersonEventName>;
 ```
 
 Generated Java output (`HonoWebApiSharedConsts.java`):

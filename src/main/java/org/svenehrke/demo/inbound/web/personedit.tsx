@@ -60,8 +60,8 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 							type="submit"
 							class="level-item button is-primary"
 							hx-trigger="click consume"
-							hx-put={personActionUrls.UpdatePerson.url(vm.id)} /* Expects backend to respond with 'person-updated'(id) event */
-							hx-swap="none" /* Works with event handling of 'person-updated' */
+							hx-put={personActionUrls.UpdatePerson.url(vm.id)} /* Expects backend to respond with 'PERSON_UPDATED'(id) event */
+							hx-swap="none" /* Works with event handling of 'PERSON_UPDATED' */
 						>Save
 						</button>
 					</nav>
