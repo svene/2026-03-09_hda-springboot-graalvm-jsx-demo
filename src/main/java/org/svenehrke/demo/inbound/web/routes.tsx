@@ -9,7 +9,8 @@ import {PersondetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
 import {PersonEventName, PersonRouteName} from "./generated/types/vm-types";
 
-const componentUrl = (name: PersonRouteName, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
+const nameIdUrl = (name: PersonRouteName, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
+const nameUrl = (name: PersonRouteName) => `/component/${name}`; // SPRING-HONO
 
 /**
  * TODO: verify this comment:
@@ -28,31 +29,31 @@ const componentUrl = (name: PersonRouteName, id: number) => `/component/${name}?
 type PersonRoutesMap = { Page: RouteDefinition } & Record<PersonRouteName, RouteDefinition>;
 export const personRoutes = {
 	Page: { // SPRING-HONO
-		url: () => `/page`, // SPRING-HONO
+		url: () => nameUrl('Page'), // SPRING-HONO
 		render: (vm: any) => renderToString(<Page vm={vm}/>)
 	},
 	PersonTable: { // SPRING-HONO
-		url: () => componentUrl('PersonTable', 0), // SPRING-HONO
+		url: () => nameUrl('PersonTable'), // SPRING-HONO
 		render: (vm: any) => renderToString(<PersonTable vm={vm}/>)
 	},
 	PersonDetails: { // SPRING-HONO
-		url: (id: number) => componentUrl('PersonDetails', id), // SPRING-HONO
+		url: (id: number) => nameIdUrl('PersonDetails', id), // SPRING-HONO
 		render: (vm: any) => renderToString(<PersonDetails vm={vm}/>)
 	},
 	PersonRow: { // SPRING-HONO
-		url: (id: number) => componentUrl('PersonRow', id), // SPRING-HONO
+		url: (id: number) => nameIdUrl('PersonRow', id), // SPRING-HONO
 		render: (vm: any) => renderToString(<PersonRow vm={vm}/>)
 	},
 	PersonEditor: { // SPRING-HONO
-		url: (id: number) => componentUrl('PersonEditor', id), // SPRING-HONO
+		url: (id: number) => nameIdUrl('PersonEditor', id), // SPRING-HONO
 		render: (vm: any) => renderToString(<PersonEditor vm={vm}/>)
 	},
 	PersondetailsCard: { // SPRING-HONO
-		url: (id: number) => componentUrl('PersondetailsCard', id), // SPRING-HONO
+		url: (id: number) => nameIdUrl('PersondetailsCard', id), // SPRING-HONO
 		render: (vm: any) => renderToString(<PersondetailsCard vm={vm}/>)
 	},
 	PersondetailsRow: { // SPRING-HONO
-		url: (id: number) => componentUrl('PersondetailsRow', id), // SPRING-HONO
+		url: (id: number) => nameIdUrl('PersondetailsRow', id), // SPRING-HONO
 		render: (vm: any) => renderToString(<PersondetailsRow vm={vm}/>)
 	},
 } satisfies PersonRoutesMap;

@@ -1,7 +1,7 @@
 import {test, expect} from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8080';
-const PAGE_URL = BASE_URL + '/page';
+const PAGE_URL = BASE_URL + '/component/Page';
 
 // Seed data (Faker with seed 0): first person is Jackie Rau, Waelchi Orchard
 const FIRST_PERSON = { firstName: 'Jackie', lastName: 'Rau', street: 'Waelchi Orchard' };

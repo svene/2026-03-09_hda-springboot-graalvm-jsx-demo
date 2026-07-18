@@ -13,11 +13,13 @@ import static org.svenehrke.demo.inbound.web.PersonRouteName.*;
 @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
 public class PersonComponentController {
 
+	public static final String PAGE_URL = "/component/Page";
 	private final PeopleService peopleService;
 	private final JsxRenderer renderer;
 
 	@Value("${spring.profiles.active:}")
 	private String activeProfile;
+	// TODO: model.addAttribute("devMode", activeProfile.contains("dev"));
 
 	public PersonComponentController(PeopleService peopleService, JsxRenderer renderer) {
 		this.peopleService = peopleService;
@@ -25,7 +27,7 @@ public class PersonComponentController {
 	}
 
 	@GetMapping("/component/{name}") // SPRING-HONO
-	public String component(@PathVariable String name, @RequestParam("id") int id, HttpServletRequest request) {
+	public String component(@PathVariable String name, @RequestParam(name = "id", required = false) Integer id, HttpServletRequest request) {
 		PersonRouteName routeName;
 		try {
 			routeName = valueOf(name);
@@ -33,6 +35,7 @@ public class PersonComponentController {
 			return renderer.render(PersonRow.name(), null); // TODO: return 404-response
 		}
 		Object vm = switch (routeName) {
+			case Page -> new PersonPageModel(peopleService.personTableModel());
 			case PersonDetails, PersondetailsCard , PersondetailsRow
 				-> peopleService.personDetailModel(id);
 			case PersonTable -> peopleService.peopleForSearch(request.getParameter("search"));
