@@ -1,5 +1,5 @@
 import {PersonEditModel} from "./generated/types/vm-types";
-import {personActionUrls, personEvents, personRoutes} from "./routes";
+import {eventName, personActionUrls, personRoutes} from "./routes";
 
 export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 	<tr id={`row-${vm.id}-edit`}>
@@ -13,7 +13,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 		></template>
 		<template
 			hx-trigger={`
-			${personEvents.PERSON_UPDATED}[event.detail.id === ${vm.id}] from:closest tr
+			${eventName('PERSON_UPDATED')}[event.detail.id === ${vm.id}] from:closest tr
 			`}
 			hx-target="closest tr"
 			hx-swap="outerHTML"

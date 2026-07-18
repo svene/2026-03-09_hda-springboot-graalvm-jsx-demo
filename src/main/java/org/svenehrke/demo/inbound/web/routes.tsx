@@ -66,8 +66,13 @@ export const personActionUrls = {
 	},
 } satisfies Record<string, ActionUrlDefinition>;
 
-// SPRING-HONO: PersonComponentController.EvtBackendEvents
 export const personEvents = { // TODO: is there a better way ?
 	PERSON_UPDATED: 'PERSON_UPDATED',
 } satisfies Record<PersonEventName, PersonEventName>;
 
+/** SPRING-HONO: PersonEventName.java
+ * guard function to be used in tsx supporting code completion
+ */
+export const eventName = (name: PersonEventName): PersonEventName => {
+	return name
+}

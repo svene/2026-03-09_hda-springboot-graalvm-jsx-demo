@@ -1,4 +1,4 @@
-import {personEvents, personRoutes} from "./routes";
+import {personRoutes, eventName} from "./routes";
 import {PersonDetailModel} from "./generated/types/vm-types";
 
 export const PersondetailsRow = ({vm}: { vm: PersonDetailModel }) => (
@@ -15,7 +15,7 @@ export const PersondetailsRow = ({vm}: { vm: PersonDetailModel }) => (
 					hx-get={personRoutes.PersonRow.url(vm.id)}
 				></template>
 				<template
-					hx-trigger={`${personEvents.PERSON_UPDATED}[event.detail.id == ${vm.id}] from:body`}
+					hx-trigger={`${eventName('PERSON_UPDATED')}[event.detail.id == ${vm.id}] from:body`}
 					hx-target="closest tr"
 					hx-swap="outerHTML"
 					hx-get={personRoutes.PersondetailsRow.url(vm.id)}
