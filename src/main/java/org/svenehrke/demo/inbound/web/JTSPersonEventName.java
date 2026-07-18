@@ -1,5 +1,6 @@
 package org.svenehrke.demo.inbound.web;
 
-public enum PersonEventName {
+/** JTS: Java-TS */
+public enum JTSPersonEventName {
 	PERSON_UPDATED,
 }

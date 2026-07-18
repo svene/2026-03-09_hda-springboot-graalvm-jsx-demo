@@ -24,12 +24,12 @@ public class PersonActionController {
 		peopleService.updatePerson(id, personEditModel);
 		response.setHeader(HTMXConsts.HX_TRIGGER, """
 			{"%s": {"id": %d}}\
-			""".formatted(PersonEventName.PERSON_UPDATED.name(), id));
+			""".formatted(JTSPersonEventName.PERSON_UPDATED.name(), id));
 	}
 	@DeleteMapping("/delete") // SPRING-HONO
 	public void deleteRows(@RequestParam List<Integer> selection, HttpServletResponse response) {
 		peopleService.deleteByIds(selection);
-		response.setHeader(HX_REDIRECT, PersonComponentController.PAGE_URL);
+		response.setHeader(HX_REDIRECT, JTSPersonUrls.PAGE_URL);
 	}
 
 }

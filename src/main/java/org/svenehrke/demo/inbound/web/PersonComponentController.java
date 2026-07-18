@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import org.svenehrke.demo.core.PeopleService;
 import org.svenehrke.demo.inbound.web.infra.js.JsxRenderer;
 
-import static org.svenehrke.demo.inbound.web.PersonRouteName.*;
+import static org.svenehrke.demo.inbound.web.JTSPersonRouteName.*;
 
 @RestController
 @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
 public class PersonComponentController {
 
-	public static final String PAGE_URL = "/component/Page";
 	private final PeopleService peopleService;
 	private final JsxRenderer renderer;
 
@@ -28,7 +27,7 @@ public class PersonComponentController {
 
 	@GetMapping("/component/{name}") // SPRING-HONO
 	public String component(@PathVariable String name, @RequestParam(name = "id", required = false) Integer id, HttpServletRequest request) {
-		PersonRouteName routeName;
+		JTSPersonRouteName routeName;
 		try {
 			routeName = valueOf(name);
 		} catch (IllegalArgumentException e) {

@@ -7,10 +7,10 @@ import {PersonRow} from "./personrow";
 import {PersonEditor} from "./personedit";
 import {PersondetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
-import {PersonEventName, PersonRouteName} from "./generated/types/vm-types";
+import {JTSPersonEventName, JTSPersonRouteName} from "./generated/types/vm-types";
 
-const nameIdUrl = (name: PersonRouteName, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
-const nameUrl = (name: PersonRouteName) => `/component/${name}`; // SPRING-HONO
+const nameIdUrl = (name: JTSPersonRouteName, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
+const nameUrl = (name: JTSPersonRouteName) => `/component/${name}`; // SPRING-HONO
 
 /**
  * TODO: verify this comment:
@@ -26,7 +26,7 @@ const nameUrl = (name: PersonRouteName) => `/component/${name}`; // SPRING-HONO
  *    The generator code is located in the folder `javagen`.
  **/
 
-type PersonRoutesMap = { Page: RouteDefinition } & Record<PersonRouteName, RouteDefinition>;
+type PersonRoutesMap = { Page: RouteDefinition } & Record<JTSPersonRouteName, RouteDefinition>;
 export const personRoutes = {
 	Page: { // SPRING-HONO
 		url: () => nameUrl('Page'), // SPRING-HONO
@@ -67,9 +67,9 @@ export const personActionUrls = {
 	},
 } satisfies Record<string, ActionUrlDefinition>;
 
-/** SPRING-HONO: PersonEventName.java
+/** SPRING-HONO: JTSPersonEventName.java
  * guard function to be used in tsx supporting code completion
  */
-export const eventName = (name: PersonEventName): PersonEventName => {
+export const eventName = (name: JTSPersonEventName): JTSPersonEventName => {
 	return name
 }

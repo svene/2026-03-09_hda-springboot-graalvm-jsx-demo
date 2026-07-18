@@ -91,8 +91,8 @@
 						<pattern>org.svenehrke.demo.inbound.**.*VM</pattern>
 					</classPatterns>
 					<classes>
-						<class>org.svenehrke.demo.inbound.web.PersonRouteName</class>
-						<class>org.svenehrke.demo.inbound.web.PersonEventName</class>
+						<class>org.svenehrke.demo.inbound.web.JTSPersonRouteName</class>
+						<class>org.svenehrke.demo.inbound.web.JTSPersonEventName</class>
 					</classes>
 					<outputFile>${project.basedir}/src/main/java/org/svenehrke/demo/inbound/web/generated/types/vm-types.d.ts</outputFile>
 					<outputFileType>declarationFile</outputFileType>
