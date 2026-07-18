@@ -7,8 +7,9 @@ import {PersonRow} from "./personrow";
 import {PersonEditor} from "./personedit";
 import {PersondetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
+import {PersonRouteName} from "./generated/types/vm-types";
 
-const componentUrl = (name: string, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
+const componentUrl = (name: PersonRouteName, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
 
 /**
  * TODO: verify this comment:
@@ -24,7 +25,7 @@ const componentUrl = (name: string, id: number) => `/component/${name}?id=${id}`
  *    The generator code is located in the folder `javagen`.
  **/
 
-
+type PersonRoutesMap = { Page: RouteDefinition } & Record<PersonRouteName, RouteDefinition>;
 export const personRoutes = {
 	Page: { // SPRING-HONO
 		url: () => `/page`, // SPRING-HONO
@@ -54,7 +55,7 @@ export const personRoutes = {
 		url: (id: number) => componentUrl('PersondetailsRow', id), // SPRING-HONO
 		render: (vm: any) => renderToString(<PersondetailsRow vm={vm}/>)
 	},
-} satisfies Record<string, RouteDefinition>;
+} satisfies PersonRoutesMap;
 
 export const personActionUrls = {
 	UpdatePerson: { // SPRING-HONO

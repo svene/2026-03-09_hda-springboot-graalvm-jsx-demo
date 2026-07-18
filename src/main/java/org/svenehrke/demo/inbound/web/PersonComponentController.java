@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.svenehrke.demo.core.PeopleService;
 import org.svenehrke.demo.inbound.web.infra.js.JsxRenderer;
 
+import static org.svenehrke.demo.inbound.web.PersonRouteName.*;
+
 @RestController
 @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
 public class PersonComponentController {
@@ -24,13 +26,18 @@ public class PersonComponentController {
 
 	@GetMapping("/component/{name}") // SPRING-HONO
 	public String component(@PathVariable String name, @RequestParam("id") int id, HttpServletRequest request) {
-		Object vm = switch (name) {
-			case "PersonDetails", "PersondetailsCard", "PersondetailsRow"
+		PersonRouteName routeName;
+		try {
+			routeName = valueOf(name);
+		} catch (IllegalArgumentException e) {
+			return renderer.render(PersonRow.name(), null); // TODO: return 404-response
+		}
+		Object vm = switch (routeName) {
+			case PersonDetails, PersondetailsCard , PersondetailsRow
 				-> peopleService.personDetailModel(id);
-			case "PersonTable" -> peopleService.peopleForSearch(request.getParameter("search"));
-			case "PersonRow" -> peopleService.personTableRowModel(id);
-			case "PersonEditor" -> peopleService.personEditModel(id);
-			default -> null;
+			case PersonTable -> peopleService.peopleForSearch(request.getParameter("search"));
+			case PersonRow -> peopleService.personTableRowModel(id);
+			case PersonEditor -> peopleService.personEditModel(id);
 		};
 		return renderer.render(name, vm);
 	}

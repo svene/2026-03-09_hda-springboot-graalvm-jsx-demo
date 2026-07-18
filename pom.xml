@@ -90,10 +90,14 @@
 						<pattern>org.svenehrke.demo.inbound.**.*Model</pattern>
 						<pattern>org.svenehrke.demo.inbound.**.*VM</pattern>
 					</classPatterns>
+					<classes>
+						<class>org.svenehrke.demo.inbound.web.PersonRouteName</class>
+					</classes>
 					<outputFile>${project.basedir}/src/main/java/org/svenehrke/demo/inbound/web/generated/types/vm-types.d.ts</outputFile>
 					<outputFileType>declarationFile</outputFileType>
 					<outputKind>module</outputKind>
 					<mapClasses>asInterfaces</mapClasses>
+					<mapEnum>asUnion</mapEnum>
 				</configuration>
 			</plugin>
 
