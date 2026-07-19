@@ -20,7 +20,7 @@ const nameUrl = (name: JTSPersonRouteName) => `/component/${name}`; // SPRING-HO
  *    See `hx-get={detailsUrl(vm.id)}` in `personrow.tsx` as an example.
  *
  * 2. For the Controller-Endpoints in the Java-Spring part.
- *    See PersonComponentController.java on how they are used.
+ *    See PersonUIController.java on how they are used.
  *    Note that the Java-Constants used in the Controller are generated
  *    from the constants here in this file.
  *    The generator code is located in the folder `javagen`.

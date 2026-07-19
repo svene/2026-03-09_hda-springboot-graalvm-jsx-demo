@@ -11,7 +11,7 @@ import static org.svenehrke.demo.inbound.web.JTSPersonRouteName.*;
 
 @RestController
 @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
-public class PersonComponentController {
+public class PersonUIController {
 
 	private final PeopleService peopleService;
 	private final JsxRenderer renderer;
@@ -20,7 +20,7 @@ public class PersonComponentController {
 	private String activeProfile;
 	// TODO: model.addAttribute("devMode", activeProfile.contains("dev"));
 
-	public PersonComponentController(PeopleService peopleService, JsxRenderer renderer) {
+	public PersonUIController(PeopleService peopleService, JsxRenderer renderer) {
 		this.peopleService = peopleService;
 		this.renderer = renderer;
 	}
