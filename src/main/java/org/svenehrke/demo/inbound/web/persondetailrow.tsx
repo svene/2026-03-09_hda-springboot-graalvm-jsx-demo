@@ -1,15 +1,16 @@
-import {personRoutes, eventName} from "./routes";
+import {personRoutes} from "./routes";
 import {PersonDetailModel} from "./generated/types/vm-types";
+import {eventName} from "./jtsperson";
 
 export const PersonDetailsRow = ({vm}: { vm: PersonDetailModel }) => (
 		<>
 			<tr
 				id={`row-${vm.id}`}
 				style="cursor: pointer"
-				_={`on click halt the event then send '${EvtPersonDetailsRowX.CLOSE_REQUESTED}'(id:${vm.id})`}
+				_={`on click halt the event then send ${eventName('PersonDetailsRow_CloseCmd')}(id:${vm.id})`}
 			>
 				<template
-					hx-trigger={`${EvtPersonDetailsRowX.CLOSE_REQUESTED}[event.detail.id == ${vm.id}] from:closest tr`}
+					hx-trigger={`${eventName('PersonDetailsRow_CloseCmd')}[event.detail.id == ${vm.id}] from:closest tr`}
 					hx-target="closest tr"
 					hx-swap="outerHTML"
 					hx-get={personRoutes.PersonRow.url(vm.id)}
@@ -28,7 +29,3 @@ export const PersonDetailsRow = ({vm}: { vm: PersonDetailModel }) => (
 			</tr>
 		</>
 );
-
-export const EvtPersonDetailsRowX = {
-	CLOSE_REQUESTED: 'close-details-requested',
-}

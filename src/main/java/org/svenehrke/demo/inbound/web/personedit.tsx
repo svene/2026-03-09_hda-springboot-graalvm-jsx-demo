@@ -1,5 +1,6 @@
 import {PersonEditModel} from "./generated/types/vm-types";
-import {eventName, personActionUrls, personRoutes} from "./routes";
+import {personActionUrls, personRoutes} from "./routes";
+import {eventName} from "./jtsperson";
 
 export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 	<tr id={`row-${vm.id}-edit`}>

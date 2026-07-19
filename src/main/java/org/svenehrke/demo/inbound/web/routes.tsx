@@ -1,4 +1,4 @@
-import { renderToString } from 'hono/jsx/dom/server';
+import {renderToString} from 'hono/jsx/dom/server';
 import {ActionUrlDefinition, RouteDefinition} from "./route-types";
 import {PersonDetailsCard} from "./personDetailsCard";
 import {Page} from "./personpage";
@@ -7,7 +7,7 @@ import {PersonRow} from "./personrow";
 import {PersonEditor} from "./personedit";
 import {PersonDetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
-import {JTSPersonEventName, JTSPersonRouteName} from "./generated/types/vm-types";
+import {JTSPersonRouteName} from "./generated/types/vm-types";
 
 const nameIdUrl = (name: JTSPersonRouteName, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
 const nameUrl = (name: JTSPersonRouteName) => `/component/${name}`; // SPRING-HONO
@@ -67,9 +67,3 @@ export const personActionUrls = {
 	},
 } satisfies Record<string, ActionUrlDefinition>;
 
-/** SPRING-HONO: JTSPersonEventName.java
- * guard function to be used in tsx supporting code completion
- */
-export const eventName = (name: JTSPersonEventName): JTSPersonEventName => {
-	return name
-}

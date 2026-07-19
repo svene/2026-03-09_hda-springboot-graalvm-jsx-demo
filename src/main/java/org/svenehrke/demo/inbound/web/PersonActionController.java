@@ -29,7 +29,7 @@ public class PersonActionController {
 	@DeleteMapping("/delete") // SPRING-HONO
 	public void deleteRows(@RequestParam List<Integer> selection, HttpServletResponse response) {
 		peopleService.deleteByIds(selection);
-		response.setHeader(HX_REDIRECT, JTSPersonUrls.PAGE_URL);
+		response.setHeader(HX_REDIRECT, JTSPerson.URLs.PAGE_URL);
 	}
 
 }

@@ -1,5 +1,6 @@
 import {PersonDetailModel} from "./generated/types/vm-types";
 import {personRoutes} from "./routes";
+import {eventName} from "./jtsperson";
 
 export const PersonDetailsCard = ({vm}: { vm: PersonDetailModel }) => (
 		<>
@@ -10,7 +11,7 @@ export const PersonDetailsCard = ({vm}: { vm: PersonDetailModel }) => (
 				hx-target="this"
 				hx-swap="outerHTML"
 				hx-get={personRoutes.PersonEditor.url(vm.id)}
-				_={`on 'close-details-requested'(id) from <body/> if id == ${vm.id} remove me end`}
+				_={`on ${eventName('PersonDetailsRow_CloseCmd')}(id) from <body/> if id == ${vm.id} remove me end`}
 			>
 				<td colSpan={5} style="padding-left: 30px">
 

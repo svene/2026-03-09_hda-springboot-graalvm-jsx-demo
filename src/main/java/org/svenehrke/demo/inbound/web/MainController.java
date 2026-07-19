@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 	@GetMapping("/")
 	public String redirectRoot() {
-		return "redirect:" + JTSPersonUrls.PAGE_URL;
+		return "redirect:" + JTSPerson.URLs.PAGE_URL;
 	}
 }
