@@ -26,7 +26,7 @@ const nameUrl = (name: JTSPersonRouteName) => `/component/${name}`; // SPRING-HO
  *    The generator code is located in the folder `javagen`.
  **/
 
-type PersonRoutesMap = { Page: RouteDefinition } & Record<JTSPersonRouteName, RouteDefinition>;
+type PersonRoutesMap = Record<JTSPersonRouteName, RouteDefinition>;
 export const personRoutes = {
 	Page: { // SPRING-HONO
 		url: () => nameUrl('Page'), // SPRING-HONO
