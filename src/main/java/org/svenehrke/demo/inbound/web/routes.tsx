@@ -1,11 +1,11 @@
 import { renderToString } from 'hono/jsx/dom/server';
 import {ActionUrlDefinition, RouteDefinition} from "./route-types";
-import {PersondetailsCard} from "./persondetailscard";
+import {PersonDetailsCard} from "./personDetailsCard";
 import {Page} from "./personpage";
 import {PersonDetails} from "./persondetails";
 import {PersonRow} from "./personrow";
 import {PersonEditor} from "./personedit";
-import {PersondetailsRow} from "./persondetailrow";
+import {PersonDetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
 import {JTSPersonEventName, JTSPersonRouteName} from "./generated/types/vm-types";
 
@@ -48,13 +48,13 @@ export const personRoutes = {
 		url: (id: number) => nameIdUrl('PersonEditor', id), // SPRING-HONO
 		render: (vm: any) => renderToString(<PersonEditor vm={vm}/>)
 	},
-	PersondetailsCard: { // SPRING-HONO
-		url: (id: number) => nameIdUrl('PersondetailsCard', id), // SPRING-HONO
-		render: (vm: any) => renderToString(<PersondetailsCard vm={vm}/>)
+	PersonDetailsCard: { // SPRING-HONO
+		url: (id: number) => nameIdUrl('PersonDetailsCard', id), // SPRING-HONO
+		render: (vm: any) => renderToString(<PersonDetailsCard vm={vm}/>)
 	},
-	PersondetailsRow: { // SPRING-HONO
-		url: (id: number) => nameIdUrl('PersondetailsRow', id), // SPRING-HONO
-		render: (vm: any) => renderToString(<PersondetailsRow vm={vm}/>)
+	PersonDetailsRow: { // SPRING-HONO
+		url: (id: number) => nameIdUrl('PersonDetailsRow', id), // SPRING-HONO
+		render: (vm: any) => renderToString(<PersonDetailsRow vm={vm}/>)
 	},
 } satisfies PersonRoutesMap;
 

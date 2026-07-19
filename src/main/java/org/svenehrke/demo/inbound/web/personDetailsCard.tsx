@@ -1,7 +1,7 @@
 import {PersonDetailModel} from "./generated/types/vm-types";
 import {personRoutes} from "./routes";
 
-export const PersondetailsCard = ({vm}: { vm: PersonDetailModel }) => (
+export const PersonDetailsCard = ({vm}: { vm: PersonDetailModel }) => (
 		<>
 			<tr
 				id={`row-${vm.id}-details`}

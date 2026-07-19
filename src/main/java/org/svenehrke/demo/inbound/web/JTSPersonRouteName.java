@@ -4,8 +4,8 @@ package org.svenehrke.demo.inbound.web;
 public enum JTSPersonRouteName {
 	Page,
 	PersonDetails,
-	PersondetailsCard,
-	PersondetailsRow,
+	PersonDetailsCard,
+	PersonDetailsRow,
 	PersonTable,
 	PersonRow,
 	PersonEditor,

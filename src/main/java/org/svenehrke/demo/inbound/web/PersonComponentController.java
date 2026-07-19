@@ -35,7 +35,7 @@ public class PersonComponentController {
 		}
 		Object vm = switch (routeName) {
 			case Page -> new PersonPageModel(peopleService.personTableModel());
-			case PersonDetails, PersondetailsCard , PersondetailsRow
+			case PersonDetails, PersonDetailsCard, PersonDetailsRow
 				-> peopleService.personDetailModel(id);
 			case PersonTable -> peopleService.peopleForSearch(request.getParameter("search"));
 			case PersonRow -> peopleService.personTableRowModel(id);

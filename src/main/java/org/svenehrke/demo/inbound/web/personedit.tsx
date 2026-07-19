@@ -9,7 +9,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 			`}
 			hx-target="closest tr"
 			hx-swap="outerHTML"
-			hx-get={personRoutes.PersondetailsCard.url(vm.id)}
+			hx-get={personRoutes.PersonDetailsCard.url(vm.id)}
 		></template>
 		<template
 			hx-trigger={`
@@ -17,7 +17,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 			`}
 			hx-target="closest tr"
 			hx-swap="outerHTML"
-			hx-get={personRoutes.PersondetailsCard.url(vm.id)}
+			hx-get={personRoutes.PersonDetailsCard.url(vm.id)}
 		></template>
 		<td colSpan={4} style="padding: 0px">
 			<div class="card p-5 my-2">

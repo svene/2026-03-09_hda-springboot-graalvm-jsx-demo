@@ -9,8 +9,8 @@ const FIRST_PERSON = { firstName: 'Jackie', lastName: 'Rau', street: 'Waelchi Or
 // URL predicates — use exact-suffix regex to avoid false matches between
 // /details, /detailsrow and /detailscard
 const isDetailsUrl     = (url: string) => /\/component\/PersonDetails/.test(url);
-const isDetailsRowUrl  = (url: string) => /\/component\/PersondetailsRow/.test(url);
-const isDetailsCardUrl = (url: string) => /\/component\/PersondetailsCard/.test(url);
+const isDetailsRowUrl  = (url: string) => /\/component\/PersonDetailsRow/.test(url);
+const isDetailsCardUrl = (url: string) => /\/component\/PersonDetailsCard/.test(url);
 const isEditUrl        = (url: string) => /\/component\/PersonEditor/.test(url);
 const isRowUrl         = (url: string) => /\/component\/PersonRow/.test(url);
 
@@ -219,7 +219,7 @@ test('saving an edit updates the row in the table', async ({ page }) => {
     page.waitForResponse(resp => resp.request().method() === 'PUT' && resp.url().includes('/person/')),
     page.locator('table tbody tr').nth(1).locator('button', { hasText: 'Save' }).click(),
   ]);
-  // After the PUT the backend fires a PERSON_UPDATED event; PersondetailsRow reloads itself
+  // After the PUT the backend fires a PERSON_UPDATED event; PersonDetailsRow reloads itself
   await detailsRowResponse;
 
   // The header row should reflect the updated name

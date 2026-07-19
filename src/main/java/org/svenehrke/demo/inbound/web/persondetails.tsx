@@ -1,10 +1,10 @@
-import {PersondetailsRow} from "./persondetailrow";
+import {PersonDetailsRow} from "./persondetailrow";
 import {PersonDetailModel} from "./generated/types/vm-types";
-import {PersondetailsCard} from "./persondetailscard";
+import {PersonDetailsCard} from "./personDetailsCard";
 
 export const PersonDetails = ({vm}: {vm: PersonDetailModel}) => (
 	<>
-		<PersondetailsRow vm={vm}/>
-		<PersondetailsCard vm={vm}/>
+		<PersonDetailsRow vm={vm}/>
+		<PersonDetailsCard vm={vm}/>
 	</>
 );
