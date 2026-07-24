@@ -25,8 +25,8 @@ public class PersonUIController {
 		this.renderer = renderer;
 	}
 
-	@GetMapping("/component/{name}") // SPRING-HONO
-	public String component(@PathVariable String name, @RequestParam(name = "id", required = false) Integer id, HttpServletRequest request) {
+	@GetMapping("/uiroute/{name}") // SPRING-HONO
+	public String uiroute(@PathVariable String name, @RequestParam(name = "id", required = false) Integer id, HttpServletRequest request) {
 		JTSPersonRouteName routeName;
 		try {
 			routeName = valueOf(name);

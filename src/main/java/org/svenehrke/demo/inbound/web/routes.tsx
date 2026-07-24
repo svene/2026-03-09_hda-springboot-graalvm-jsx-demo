@@ -9,8 +9,8 @@ import {PersonDetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
 import {JTSPersonRouteName} from "./generated/types/vm-types";
 
-const nameIdUrl = (name: JTSPersonRouteName, id: number) => `/component/${name}?id=${id}`; // SPRING-HONO
-const nameUrl = (name: JTSPersonRouteName) => `/component/${name}`; // SPRING-HONO
+const nameIdUrl = (name: JTSPersonRouteName, id: number) => `/uiroute/${name}?id=${id}`; // SPRING-HONO
+const nameUrl = (name: JTSPersonRouteName) => `/uiroute/${name}`; // SPRING-HONO
 
 /**
  * TODO: verify this comment:

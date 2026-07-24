@@ -1,18 +1,18 @@
 import {test, expect} from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8080';
-const PAGE_URL = BASE_URL + '/component/Page';
+const PAGE_URL = BASE_URL + '/uiroute/Page';
 
 // Seed data (Faker with seed 0): first person is Jackie Rau, Waelchi Orchard
 const FIRST_PERSON = { firstName: 'Jackie', lastName: 'Rau', street: 'Waelchi Orchard' };
 
 // URL predicates — use exact-suffix regex to avoid false matches between
 // /details, /detailsrow and /detailscard
-const isDetailsUrl     = (url: string) => /\/component\/PersonDetails/.test(url);
-const isDetailsRowUrl  = (url: string) => /\/component\/PersonDetailsRow/.test(url);
-const isDetailsCardUrl = (url: string) => /\/component\/PersonDetailsCard/.test(url);
-const isEditUrl        = (url: string) => /\/component\/PersonEditor/.test(url);
-const isRowUrl         = (url: string) => /\/component\/PersonRow/.test(url);
+const isDetailsUrl     = (url: string) => /\/uiroute\/PersonDetails/.test(url);
+const isDetailsRowUrl  = (url: string) => /\/uiroute\/PersonDetailsRow/.test(url);
+const isDetailsCardUrl = (url: string) => /\/uiroute\/PersonDetailsCard/.test(url);
+const isEditUrl        = (url: string) => /\/uiroute\/PersonEditor/.test(url);
+const isRowUrl         = (url: string) => /\/uiroute\/PersonRow/.test(url);
 
 test('has title', async ({ page }) => {
   await page.goto(BASE_URL + '/');
@@ -45,7 +45,7 @@ test('search filters the table', async ({ page }) => {
 
   const searchInput = page.locator('input[name="search"]');
   await Promise.all([
-    page.waitForResponse(resp => resp.url().includes('/component/PersonTable')),
+    page.waitForResponse(resp => resp.url().includes('/uiroute/PersonTable')),
     searchInput.fill(FIRST_PERSON.firstName),
   ]);
 
@@ -67,11 +67,11 @@ test('clearing search restores full list', async ({ page }) => {
 
   const searchInput = page.locator('input[name="search"]');
   await Promise.all([
-    page.waitForResponse(resp => resp.url().includes('/component/PersonTable')),
+    page.waitForResponse(resp => resp.url().includes('/uiroute/PersonTable')),
     searchInput.fill(FIRST_PERSON.firstName),
   ]);
   await Promise.all([
-    page.waitForResponse(resp => resp.url().includes('/component/PersonTable')),
+    page.waitForResponse(resp => resp.url().includes('/uiroute/PersonTable')),
     searchInput.clear(),
   ]);
 
