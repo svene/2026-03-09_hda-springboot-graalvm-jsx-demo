@@ -69,3 +69,23 @@ and the following script entry in `layout.tsx`:
 ````
 (the last one can also be replaced by dedicated browser extensions)
 
+## 2026-07-26
+
+generation Java -> TS (pom:xml)
+- *Model.java,*VM.java -> vm-types.d.ts (interfaces)
+- JTSPersonRouteName -> vm-types.d.ts (union type)
+- JTSPersonEventName -> vm-types.d.ts (union type)
+
+PersonUIController uses
+- JTSPersonRouteName for dispatching to TS rendering
+- *Model to create VMs for TS side
+
+PersonActionController uses
+- JTSPersonEventName to send HTTP-response events
+
+TS-components use
+- vm-types/*Model for VMs
+- vm-types/JTSPersonEventName to send events inside the UI
+
+TS-routing (routes.tsx) uses
+- vm-types/JTSPersonRouteName for route definitions
