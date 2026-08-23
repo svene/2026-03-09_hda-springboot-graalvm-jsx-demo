@@ -16,15 +16,18 @@ public class JsBundleWatcher {
 
 	private final Resource resource;
 	private final JsHolder jsHolder;
+	private final DevReloadSSE devReloadSSE;
 
 	private long lastModified = -1;
 
 	public JsBundleWatcher(
 		AppConfigProperties appConfigProperties,
-		JsHolder jsHolder
+		JsHolder jsHolder,
+		DevReloadSSE devReloadSSE
 	) {
 		resource = appConfigProperties.ssr().resource();
 		this.jsHolder = jsHolder;
+		this.devReloadSSE = devReloadSSE;
 	}
 
 	@Scheduled(fixedDelay = 500) // every 1 second
@@ -40,6 +43,7 @@ public class JsBundleWatcher {
 			lastModified = current;
 			log.info("SSR bundle changed → reloading");
 			jsHolder.initPool();
+			devReloadSSE.broadcastReload(); // notify browser about ssr.js change
 		}
 	}
 }

@@ -45,28 +45,24 @@ corresponding function in `render.tsx`
 ### Live reload for the browser
 During development the browser should automatically refresh when one of the tsx files is changed.
 
-This is achieved by using springs devtools:
+This is achieved by using a SSE connection (see `DevReloadSSE.java`) which will
+be triggered by `JsBundleWatcher` whenever the `ssr.js` bundle changed.
 
-````xml
-<dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-devtools</artifactId>
-  <scope>runtime</scope>
-  <optional>true</optional>
-</dependency>
-````
-... the following settings in `application-dev.properties`:
-````properties
-spring.devtools.restart.exclude=static/fe/**
-spring.devtools.livereload.enabled=true
-spring.devtools.restart.poll-interval=50
-spring.devtools.restart.quiet-period=10
+`layout.tsx` with `dev.js` then listens to these SSE events:
+````js
+new EventSource("/dev-reload")
+  .addEventListener("reload", () => {
+    console.log("Reload triggered");
+    location.reload();
+    }
+  );
 ````
 
-and the following script entry in `layout.tsx`:
-````html
-  <script src="http://localhost:35729/livereload.js"></script>
-````
+Note: `spring-boot-devtools` is still used for JVM-level restart-on-change (see
+`application-dev.properties`), but its own browser livereload feature is disabled
+(`spring.devtools.livereload.enabled=false`) since it is superseded by the SSE
+mechanism above, which reloads precisely when `ssr.js` changes instead of on every
+classpath change.
 (the last one can also be replaced by dedicated browser extensions)
 
 ## 2026-07-26
