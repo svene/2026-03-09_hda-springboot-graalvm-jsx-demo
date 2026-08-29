@@ -10,7 +10,11 @@ export const PersonRow = ({vm}: {vm: PersonTableRowModel}) => (
 		hx-swap="outerHTML"
 		hx-get={personRoutes.PersonDetails.url(vm.id)}
 	>
-		<td hx-trigger="click consume"> {/* consume: prevent bubbling, only checkbox needs to be clicked, not parents*/}
+		{/* htmx 4 only wires up hx-trigger on elements that also carry an action
+		  * attribute (hx-get/post/etc); a bare "click consume" here would silently
+		  * never run, so use hx-on:click to stop the checkbox click from also
+		  * triggering the row's own click-to-expand handler. */}
+		<td hx-on:click="event.stopPropagation()">
 			<input type="checkbox" name="selection" value={vm.id} form="bulkDeleteForm"></input>
 		</td>
 		<td>{vm.firstName}</td>

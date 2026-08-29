@@ -10,7 +10,7 @@ export const PersonDetailsRow = ({vm}: { vm: PersonDetailModel }) => (
 				_={`on click halt the event then send ${eventName('PersonDetailsRow_CloseCmd')}(id:${vm.id})`}
 			>
 				<template
-					hx-trigger={`${eventName('PersonDetailsRow_CloseCmd')}[event.detail.id == ${vm.id}] from:closest tr`}
+					hx-trigger={`${eventName('PersonDetailsRow_CloseCmd')}[event.detail.id == ${vm.id}] from:'closest tr'`}
 					hx-target="closest tr"
 					hx-swap="outerHTML"
 					hx-get={personRoutes.PersonRow.url(vm.id)}
