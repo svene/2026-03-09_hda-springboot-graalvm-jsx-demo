@@ -6,7 +6,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 	<tr id={`row-${vm.id}-edit`}>
 		<template
 			hx-trigger={`
-			${EditEvents.CLOSE_REQUESTED}[event.detail.id == ${vm.id}] from:'closest tr'
+			${EditEvents.CLOSE_REQUESTED}[detail.id == ${vm.id}] from:'closest tr'
 			`}
 			hx-target="closest tr"
 			hx-swap="outerHTML"
@@ -14,7 +14,7 @@ export const PersonEditor = ({ vm }: {vm: PersonEditModel}) => (
 		></template>
 		<template
 			hx-trigger={`
-			${eventName('PERSON_UPDATED')}[event.detail.id === ${vm.id}] from:'closest tr'
+			${eventName('PERSON_UPDATED')}[detail.id === ${vm.id}] from:'closest tr'
 			`}
 			hx-target="closest tr"
 			hx-swap="outerHTML"
