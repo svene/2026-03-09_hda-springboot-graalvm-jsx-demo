@@ -8,60 +8,60 @@ import {PersonDetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
 import {JTSPersonRouteName} from "./generated/types/vm-types";
 
-const nameIdUrl = (name: JTSPersonRouteName, id: number) => `/uiroute/${name}?id=${id}`; // SPRING-HONO
-const nameUrl = (name: JTSPersonRouteName) => `/uiroute/${name}`; // SPRING-HONO
+const nameIdUrl = (name: JTSPersonRouteName, id: number) => `/uiroute/${name}?id=${id}`; // Java-HONO
+const nameUrl = (name: JTSPersonRouteName) => `/uiroute/${name}`; // Java-HONO
 
 /**
- * TODO: verify this comment:
- * These constants have two main purposes:
- * 1. in the TSX templates for the HTML-links or htmx-actions:
- *    this is done indirectly via route-builder.ts.
- *    See `hx-get="${personRoutes.PersonDetails.url(vm.id)}"` in `personrow.tsx` as an example.
+ * `personRoutes` is the single source of truth for the component URLs dispatched
+ * through `PersonUIController.java`'s `/uiroute/{name}` endpoint: both the URL a
+ * component uses in `hx-get` / `hx-target` (e.g.
+ * `hx-get="${personRoutes.PersonDetails.url(vm.id)}"` in `personrow.ts`) and the
+ * render function that produces the HTML for it live together here.
  *
- * 2. For the Controller-Endpoints in the Java-Spring part.
- *    See PersonUIController.java on how they are used.
- *    Note that the Java-Constants used in the Controller are generated
- *    from the constants here in this file.
- *    The generator code is located in the folder `javagen`.
+ * The route-name strings are checked against `JTSPersonRouteName`, a union the
+ * `typescript-generator` Maven plugin generates from the Java
+ * `JTSPersonRouteName` enum into `generated/types/vm-types.d.ts` — the Java enum
+ * is the source of truth, and `satisfies PersonRoutesMap` below makes a missing
+ * or misspelled entry a TS error.
  **/
 
 type PersonRoutesMap = Record<JTSPersonRouteName, RouteDefinition>;
 export const personRoutes = {
-	Page: { // SPRING-HONO
-		url: () => nameUrl('Page'), // SPRING-HONO
+	Page: { // Java-HONO
+		url: () => nameUrl('Page'), // Java-HONO
 		render: (vm: any) => Page(vm)
 	},
-	PersonTable: { // SPRING-HONO
-		url: () => nameUrl('PersonTable'), // SPRING-HONO
+	PersonTable: { // Java-HONO
+		url: () => nameUrl('PersonTable'), // Java-HONO
 		render: (vm: any) => PersonTable(vm)
 	},
-	PersonDetails: { // SPRING-HONO
-		url: (id: number) => nameIdUrl('PersonDetails', id), // SPRING-HONO
+	PersonDetails: { // Java-HONO
+		url: (id: number) => nameIdUrl('PersonDetails', id), // Java-HONO
 		render: (vm: any) => PersonDetails(vm)
 	},
-	PersonRow: { // SPRING-HONO
-		url: (id: number) => nameIdUrl('PersonRow', id), // SPRING-HONO
+	PersonRow: { // Java-HONO
+		url: (id: number) => nameIdUrl('PersonRow', id), // Java-HONO
 		render: (vm: any) => PersonRow(vm)
 	},
-	PersonEditor: { // SPRING-HONO
-		url: (id: number) => nameIdUrl('PersonEditor', id), // SPRING-HONO
+	PersonEditor: { // Java-HONO
+		url: (id: number) => nameIdUrl('PersonEditor', id), // Java-HONO
 		render: (vm: any) => PersonEditor(vm)
 	},
-	PersonDetailsCard: { // SPRING-HONO
-		url: (id: number) => nameIdUrl('PersonDetailsCard', id), // SPRING-HONO
+	PersonDetailsCard: { // Java-HONO
+		url: (id: number) => nameIdUrl('PersonDetailsCard', id), // Java-HONO
 		render: (vm: any) => PersonDetailsCard(vm)
 	},
-	PersonDetailsRow: { // SPRING-HONO
-		url: (id: number) => nameIdUrl('PersonDetailsRow', id), // SPRING-HONO
+	PersonDetailsRow: { // Java-HONO
+		url: (id: number) => nameIdUrl('PersonDetailsRow', id), // Java-HONO
 		render: (vm: any) => PersonDetailsRow(vm)
 	},
 } satisfies PersonRoutesMap;
 
 export const personActionUrls = {
-	UpdatePerson: { // SPRING-HONO
-		url: (id: number) => `/person/${id}`, // SPRING-HONO
+	UpdatePerson: { // Java-HONO
+		url: (id: number) => `/person/${id}`, // Java-HONO
 	},
-	Delete: { // SPRING-HONO
-		url: () => `/delete`, // SPRING-HONO
+	Delete: { // Java-HONO
+		url: () => `/delete`, // Java-HONO
 	},
 } satisfies Record<string, ActionUrlDefinition>;

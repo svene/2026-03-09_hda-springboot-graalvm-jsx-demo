@@ -4,16 +4,27 @@ currently this is WIP. More notes written down than real documentation
 
 ## Internal architecture notes
 
-### Generate Java from TS
+### Generate TS from Java (VM types)
 
-- `javagen/generate-java-from-hono.ts` generates Java code for the TS-VMs.
- - This way the controllers can create Java-VMs, serialize them to JSON and pass them via GraalVM to JS.\
-  - Passing VMs via JSON is much more efficient and easier compared to passing Java-Objects:\
-it is easy to do so in Java, deserializing them in JS is easy as well and much more efficient.
-  - Concretely from `src/main/java/org/svenehrke/demo/inbound/web/hono-web-api-shared-consts.ts` Java VM classes like `PersonPageModel`, `PersonTableModel`, ... will be created.
-  - TODO: rename `...Model` as `...VM`. 
-  - They will be generated into\
-  `target/generated-sources/tsjava/org/svenehrke/demo/inbound/web`
+> History: an earlier version generated Java *from* TS (`javagen/generate-java-from-hono.ts`).
+> That direction was reversed — Java is now the source of truth and the
+> `cz.habarta.typescript-generator` Maven plugin generates the TS. The `javagen/` folder is gone.
+
+- View-model types (`PersonPageModel`, `PersonTableModel`, `PersonDetailModel`, ...) are hand-written
+  Java records/classes under `src/main/java/org/svenehrke/demo/inbound/web/`, and are the single
+  source of truth.
+  - Controllers create these Java records, serialize them to JSON and pass them via GraalVM to JS.\
+    Passing VMs via JSON is much more efficient and easier than passing Java objects: easy to produce
+    in Java, easy and cheap to deserialize in JS.
+- The `cz.habarta.typescript-generator` Maven plugin (bound to `process-classes` in `pom.xml`) scans
+  `org.svenehrke.demo.inbound.**.*Model` / `*VM` and also the enums `JTSPersonRouteName` and
+  `JTSPersonEventName`, and generates matching TS interfaces + union types into\
+  `src/main/java/org/svenehrke/demo/inbound/web/generated/types/vm-types.d.ts`
+  (gitignored — regenerated on every build that reaches `process-classes`, e.g. `mvn package`).
+- `.ts` components import the generated types directly, e.g.\
+  `import {PersonDetailModel} from "./generated/types/vm-types";` and, via `jtsperson.ts`'s
+  `eventName()` guard, `JTSPersonEventName`.
+  - TODO: rename `...Model` as `...VM`.
 
 ### Generate JS for GraalVM (hono/html templates)
 

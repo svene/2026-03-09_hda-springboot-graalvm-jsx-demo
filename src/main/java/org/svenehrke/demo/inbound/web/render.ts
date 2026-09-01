@@ -24,9 +24,7 @@ import {RouteDefinition} from "./route-types";
  * right here at the Java call site.
  */
 export function render(route: string, vmJson: string): string {
-	const routeDefinitions: Record<string, RouteDefinition> = {
-		...personRoutes,
-	};
+	const routeDefinitions: Record<string, RouteDefinition> = personRoutes;
 
 	const routeDefinition = routeDefinitions[route];
 	if (routeDefinition) {

@@ -19,14 +19,14 @@ public class PersonActionController {
 		this.peopleService = peopleService;
 	}
 
-	@PutMapping("/person/{id}") // SPRING-HONO
+	@PutMapping("/person/{id}") // Java-HONO
 	public void updatePerson(@PathVariable int id, PersonEditModel personEditModel, HttpServletResponse response) {
 		peopleService.updatePerson(id, personEditModel);
 		response.setHeader(HTMXConsts.HX_TRIGGER, """
 			{"%s": {"id": %d}}\
 			""".formatted(JTSPersonEventName.PERSON_UPDATED.name(), id));
 	}
-	@DeleteMapping("/delete") // SPRING-HONO
+	@DeleteMapping("/delete") // Java-HONO
 	public void deleteRows(@RequestParam List<Integer> selection, HttpServletResponse response) {
 		peopleService.deleteByIds(selection);
 		response.setHeader(HX_REDIRECT, JTSPerson.URLs.PAGE_URL);
