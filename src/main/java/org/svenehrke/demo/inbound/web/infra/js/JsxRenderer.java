@@ -3,6 +3,7 @@ package org.svenehrke.demo.inbound.web.infra.js;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.svenehrke.demo.inbound.web.JTSPersonRouteName;
 import tools.jackson.databind.json.JsonMapper;
 
 @Service
@@ -21,13 +22,13 @@ public class JsxRenderer {
 		this.jsHolder = jsHolder;
 	}
 
-	public String render(String route, Object vm) {
+	public String render(JTSPersonRouteName route, Object vm) {
 		log.info("rendering {}", route);
 		JsConnection ctx = null;
 		try {
 			String vmJson = jsonMapper.writeValueAsString(vm);
 			ctx = jsHolder.jsConnectionPoolSupplier().get().borrow();
-			var result = ctx.getEntryFunction("render").execute(route, vmJson);
+			var result = ctx.getEntryFunction("render").execute(route.name(), vmJson);
 			return result.asString();
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();

@@ -49,12 +49,12 @@ public class PersonUIController {
 			default -> throw new IllegalStateException(
 				routeName + " is served by its own dedicated endpoint, not " + getClass().getSimpleName() + "#uiroute");
 		};
-		return renderer.render(name, vm);
+		return renderer.render(routeName, vm);
 	}
 
 	@GetMapping("/uiroute/PersonTable") // Java-HONO
 	public String personTable(@RequestParam(name = "search", required = false) String search) {
-		return renderer.render(PersonTable.name(), peopleService.peopleForSearch(search));
+		return renderer.render(PersonTable, peopleService.peopleForSearch(search));
 	}
 
 }
