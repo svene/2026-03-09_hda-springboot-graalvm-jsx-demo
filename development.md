@@ -45,7 +45,7 @@ currently this is WIP. More notes written down than real documentation
   no JSX and are plain `.ts`; `tsconfig.json` no longer sets `jsx` / `jsxImportSource`.
 - started by invoking `npm run build`...
 - ... which runs:\
-`npx esbuild src/main/java/org/svenehrke/demo/inbound/web/render.ts --bundle --platform=neutral --format=cjs --outfile=target/classes/static/fe/ssr.js`
+`npx esbuild src/main/java/org/svenehrke/demo/inbound/web/render.ts --bundle --platform=neutral --format=cjs --outfile=target/classes/static/js/ssr.js`
 - This means a single JS file (`ssr.js`) is generated from the `.ts` files to be used from Java via GraalVM.
 - `render.ts` exports a single `render(route, vmJson)` entry function. It doesn't dispatch itself —
   it looks `route` up in `routes.ts`'s `personRoutes` map and calls that entry's `render(vm)`:
