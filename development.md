@@ -25,6 +25,16 @@ currently this is WIP. More notes written down than real documentation
   `import {PersonDetailModel} from "./generated/types/vm-types";` and, via `jtsperson.ts`'s
   `eventName()` guard, `JTSPersonEventName`.
   - TODO: rename `...Model` as `...VM`.
+- typescript-generator only emits *types*. The two mutation endpoint path templates
+  (`HonoWebApiSharedConsts.java`: `PERSON = "/person/{id}"`, `DELETE = "/delete"`) are needed as
+  runtime string values on the TS side, so a small **inline Groovy script in `pom.xml`**
+  (`gmavenplus-plugin`, also bound to `process-classes`) reflects over
+  `HonoWebApiSharedConsts.HonoWebApiConsts` and writes\
+  `generated/types/web-api-consts.ts` (`export const HonoWebApiConsts = { … } as const`), which
+  `routes.ts` imports for `personActionUrls`. Same Java constants are used in
+  `PersonActionController`'s `@PutMapping` / `@DeleteMapping` (compile-time constants), so nothing is
+  hand-synced. Needs `gmavenplus` 5.1.0 + `org.apache.groovy:groovy` 5.1.1 (older Groovy can't parse
+  JDK 25 class files).
 
 ### Generate JS for GraalVM (hono/html templates)
 

@@ -102,6 +102,64 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<!--
+				  typescript-generator (above) can only emit *types*, but the TS side needs the
+				  mutation endpoint path templates as runtime string values. This inline Groovy
+				  script reflects over HonoWebApiSharedConsts.HonoWebApiConsts (the Java source of
+				  truth, also used in PersonActionController's @PutMapping/@DeleteMapping) and writes
+				  generated/types/web-api-consts.ts. Runs in process-classes, same as typescript-generator.
+				-->
+				<groupId>org.codehaus.gmavenplus</groupId>
+				<artifactId>gmavenplus-plugin</artifactId>
+				<version>5.1.0</version>
+				<executions>
+					<execution>
+						<id>generate-web-api-consts-ts</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<scripts>
+								<script><![CDATA[
+									import java.lang.reflect.Modifier
+
+									def quote = { s -> '"' + s.toString().replace('\\', '\\\\').replace('"', '\\"') + '"' }
+
+									def cls = Class.forName('org.svenehrke.demo.inbound.web.HonoWebApiSharedConsts$HonoWebApiConsts')
+
+									def entries = cls.declaredFields
+										.findAll { it.type == String && Modifier.isStatic(it.modifiers) }
+										.sort { it.name }
+										.collect { f -> "\t${f.name}: ${quote(f.get(null))}," }
+										.join('\n')
+
+									def out = new File(project.basedir,
+										'src/main/java/org/svenehrke/demo/inbound/web/generated/types/web-api-consts.ts')
+									out.parentFile.mkdirs()
+									out.text = """\
+// GENERATED from HonoWebApiSharedConsts.java by the gmavenplus script in pom.xml - do not edit.
+export const HonoWebApiConsts = {
+${entries}
+} as const;
+"""
+									log.info("wrote ${out}")
+								]]></script>
+							</scripts>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.groovy</groupId>
+						<artifactId>groovy</artifactId>
+						<version>5.1.1</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>
+
 	</plugins>
 
 	</build>

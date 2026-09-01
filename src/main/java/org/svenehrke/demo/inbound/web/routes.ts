@@ -7,6 +7,7 @@ import {PersonEditor} from "./personedit";
 import {PersonDetailsRow} from "./persondetailrow";
 import {PersonTable} from "./persontable";
 import {JTSPersonRouteName} from "./generated/types/vm-types";
+import {HonoWebApiConsts} from "./generated/types/web-api-consts";
 
 const nameIdUrl = (name: JTSPersonRouteName, id: number) => `/uiroute/${name}?id=${id}`; // Java-HONO
 const nameUrl = (name: JTSPersonRouteName) => `/uiroute/${name}`; // Java-HONO
@@ -57,11 +58,15 @@ export const personRoutes = {
 	},
 } satisfies PersonRoutesMap;
 
+// Mutation path templates come from generated/types/web-api-consts.ts, generated
+// from HonoWebApiSharedConsts.java by the gmavenplus script in pom.xml (Java is
+// the source of truth, also used in PersonActionController's @PutMapping /
+// @DeleteMapping).
 export const personActionUrls = {
 	UpdatePerson: { // Java-HONO
-		url: (id: number) => `/person/${id}`, // Java-HONO
+		url: (id: number) => HonoWebApiConsts.PERSON.replace('{id}', id + ''),
 	},
 	Delete: { // Java-HONO
-		url: () => `/delete`, // Java-HONO
+		url: () => HonoWebApiConsts.DELETE,
 	},
 } satisfies Record<string, ActionUrlDefinition>;
