@@ -9,7 +9,7 @@ RUN npm ci
 
 COPY tsconfig*.json ./
 COPY src ./src
-# Produces /app/target/classes/static/js/ssr.js
+# Produces /app/target/classes/graaljs/ssr.js
 RUN npm run build
 
 ##### Stage 2: Build the JAR with Maven #####
@@ -24,7 +24,7 @@ COPY src ./src
 
 # Bring in the frontend bundle produced above.
 # IMPORTANT: no "clean" here, or this file gets wiped before packaging.
-COPY --from=frontend-build /app/target/classes/static/js/ssr.js ./target/classes/static/js/ssr.js
+COPY --from=frontend-build /app/target/classes/graaljs/ssr.js ./target/classes/graaljs/ssr.js
 
 RUN mvn -B package -DskipTests
 

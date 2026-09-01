@@ -33,10 +33,10 @@ project-root/
 │   │   └── infra/js/                # GraalVM integration layer
 │   └── outbound/db/                 # HSQLDB + Flyway + Datafaker seed
 ├── src/main/resources/
-│   ├── application.properties       # app.ssr.resource=classpath:/static/js/ssr.js
+│   ├── application.properties       # app.ssr.resource=classpath:/graaljs/ssr.js
 │   └── static/                      # HTMX, Alpine.js, Bulma CSS
 └── target/
-    ├── classes/static/js/ssr.js     # Compiled SSR bundle (esbuild output)
+    ├── classes/graaljs/ssr.js       # Compiled SSR bundle (esbuild output, NOT under static/ so it isn't web-served)
     └── generated-sources/tsjava/   # Java records/interfaces generated from TypeScript
 ```
 
@@ -174,11 +174,11 @@ UI interactions use a combination of HTMX (server round-trips) and Hyperscript (
 
 In dev mode (`spring.profiles.active=dev`), changes to `.tsx` files propagate to the browser without a JVM restart:
 
-1. **`watch.ts`** (Bun) monitors `src/main/java/**/*.tsx` → runs esbuild → updates `target/classes/static/js/ssr.js`
+1. **`watch.ts`** (Bun) monitors `src/main/java/**/*.tsx` → runs esbuild → updates `target/classes/graaljs/ssr.js`
 2. **`JsBundleWatcher.java`** (`@Scheduled`, 500ms) polls `ssr.js` for `lastModified` changes → calls `jsHolder.initPool()` → rebuilds the GraalVM context pool with the new bundle
 3. **Spring DevTools LiveReload** notifies the browser → page refreshes
 
-`application-dev.properties` excludes `static/js/**` from the DevTools restart trigger, so only the JS pool is replaced — not the JVM. Hot-reload is fast.
+`application-dev.properties` excludes `graaljs/**` from the DevTools restart trigger, so only the JS pool is replaced — not the JVM. Hot-reload is fast.
 
 ---
 
@@ -204,7 +204,7 @@ GraalVM runs as a regular JVM library — no native GraalVM JDK required.
 ```sh
 esbuild src/main/java/.../render.tsx \
   --bundle --platform=neutral --format=cjs \
-  --outfile=target/classes/static/js/ssr.js
+  --outfile=target/classes/graaljs/ssr.js
 ```
 `--platform=neutral` avoids injecting Node.js or browser globals. `--format=cjs` produces a CommonJS bundle compatible with GraalVM's `module.exports` emulation.
 
