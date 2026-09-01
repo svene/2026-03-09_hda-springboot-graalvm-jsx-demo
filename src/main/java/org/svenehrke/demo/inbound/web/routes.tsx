@@ -1,4 +1,3 @@
-import {renderToString} from 'hono/jsx/dom/server';
 import {ActionUrlDefinition, RouteDefinition} from "./route-types";
 import {PersonDetailsCard} from "./personDetailsCard";
 import {Page} from "./personpage";
@@ -17,7 +16,7 @@ const nameUrl = (name: JTSPersonRouteName) => `/uiroute/${name}`; // SPRING-HONO
  * These constants have two main purposes:
  * 1. in the TSX templates for the HTML-links or htmx-actions:
  *    this is done indirectly via route-builder.ts.
- *    See `hx-get={detailsUrl(vm.id)}` in `personrow.tsx` as an example.
+ *    See `hx-get="${personRoutes.PersonDetails.url(vm.id)}"` in `personrow.tsx` as an example.
  *
  * 2. For the Controller-Endpoints in the Java-Spring part.
  *    See PersonUIController.java on how they are used.
@@ -30,31 +29,31 @@ type PersonRoutesMap = Record<JTSPersonRouteName, RouteDefinition>;
 export const personRoutes = {
 	Page: { // SPRING-HONO
 		url: () => nameUrl('Page'), // SPRING-HONO
-		render: (vm: any) => renderToString(<Page vm={vm}/>)
+		render: (vm: any) => Page(vm)
 	},
 	PersonTable: { // SPRING-HONO
 		url: () => nameUrl('PersonTable'), // SPRING-HONO
-		render: (vm: any) => renderToString(<PersonTable vm={vm}/>)
+		render: (vm: any) => PersonTable(vm)
 	},
 	PersonDetails: { // SPRING-HONO
 		url: (id: number) => nameIdUrl('PersonDetails', id), // SPRING-HONO
-		render: (vm: any) => renderToString(<PersonDetails vm={vm}/>)
+		render: (vm: any) => PersonDetails(vm)
 	},
 	PersonRow: { // SPRING-HONO
 		url: (id: number) => nameIdUrl('PersonRow', id), // SPRING-HONO
-		render: (vm: any) => renderToString(<PersonRow vm={vm}/>)
+		render: (vm: any) => PersonRow(vm)
 	},
 	PersonEditor: { // SPRING-HONO
 		url: (id: number) => nameIdUrl('PersonEditor', id), // SPRING-HONO
-		render: (vm: any) => renderToString(<PersonEditor vm={vm}/>)
+		render: (vm: any) => PersonEditor(vm)
 	},
 	PersonDetailsCard: { // SPRING-HONO
 		url: (id: number) => nameIdUrl('PersonDetailsCard', id), // SPRING-HONO
-		render: (vm: any) => renderToString(<PersonDetailsCard vm={vm}/>)
+		render: (vm: any) => PersonDetailsCard(vm)
 	},
 	PersonDetailsRow: { // SPRING-HONO
 		url: (id: number) => nameIdUrl('PersonDetailsRow', id), // SPRING-HONO
-		render: (vm: any) => renderToString(<PersonDetailsRow vm={vm}/>)
+		render: (vm: any) => PersonDetailsRow(vm)
 	},
 } satisfies PersonRoutesMap;
 
@@ -66,4 +65,3 @@ export const personActionUrls = {
 		url: () => `/delete`, // SPRING-HONO
 	},
 } satisfies Record<string, ActionUrlDefinition>;
-

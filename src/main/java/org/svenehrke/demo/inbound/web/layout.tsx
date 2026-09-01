@@ -1,9 +1,10 @@
-import type {Child} from 'hono/jsx'
+import {html} from "hono/html";
+import {HtmlResult} from "./route-types";
 
-export const Layout = ({ children }: { children: Child }) => (
+export const Layout = (content: HtmlResult): HtmlResult => html`
 	<html lang="en" x-data="$store.darkMode" x-bind:data-theme="theme">
 	<head>
-		<meta charSet="UTF-8"/>
+		<meta charset="UTF-8"/>
 		<title>People Admin Application</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>"/>
 		<link rel="stylesheet" href="/css/bulma.min.css"/>
@@ -16,7 +17,6 @@ export const Layout = ({ children }: { children: Child }) => (
 		<script>
 			//htmx.logAll();
 		</script>
-
 	</head>
 	<body>
 	<section class="hero is-link">
@@ -34,7 +34,7 @@ export const Layout = ({ children }: { children: Child }) => (
 		</div>
 	</section>
 
-	{children}
+	${content}
 	</body>
 	</html>
-)
+`;

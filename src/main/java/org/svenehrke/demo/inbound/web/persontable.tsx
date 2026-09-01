@@ -1,14 +1,16 @@
+import {html} from "hono/html";
 import {PersonTableModel} from "./generated/types/vm-types";
 import {PersonRow} from "./personrow";
 import {personActionUrls} from "./routes";
+import {HtmlResult} from "./route-types";
 
-export const PersonTable = ({vm}: { vm: PersonTableModel }) => (
+export const PersonTable = (vm: PersonTableModel): HtmlResult => html`
 	<div id="result-table">
 		<table class="table">
 			<thead>
 			<tr>
-				<td colSpan={5}>
-					<form id="bulkDeleteForm" hx-delete={personActionUrls.Delete.url()}>
+				<td colspan="5">
+					<form id="bulkDeleteForm" hx-delete="${personActionUrls.Delete.url()}">
 						<button type="submit" class="button">
 							<span class="icon"><i class="material-icons">delete</i></span>
 							<span>Delete</span>
@@ -25,10 +27,10 @@ export const PersonTable = ({vm}: { vm: PersonTableModel }) => (
 			</tr>
 			</thead>
 			<tbody>
-			{vm.people.map((it) => (<PersonRow vm={it}/>))}
+			${vm.people.map((it) => PersonRow(it))}
 			</tbody>
 		</table>
-		<div>{vm.people.length} of total {vm.total}</div>
+		<div>${vm.people.length} of total ${vm.total}</div>
 
 	</div>
-);
+`;
