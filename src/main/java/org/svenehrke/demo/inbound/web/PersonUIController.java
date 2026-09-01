@@ -1,6 +1,5 @@
 package org.svenehrke.demo.inbound.web;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,8 +26,14 @@ public class PersonUIController {
 		this.renderer = renderer;
 	}
 
+	/**
+	 * Handles every uiroute whose vm only ever depends on an (optional) {@code id}. A route needing
+	 * different or additional parameters — like {@link #personTable} below — gets its own dedicated
+	 * mapping instead of growing this method's signature; Spring MVC matches the literal path first,
+	 * so the two coexist without ambiguity.
+	 */
 	@GetMapping("/uiroute/{name}") // Java-HONO
-	public String uiroute(@PathVariable String name, @RequestParam(name = "id", required = false) Integer id, HttpServletRequest request) {
+	public String uiroute(@PathVariable String name, @RequestParam(name = "id", required = false) Integer id) {
 		JTSPersonRouteName routeName;
 		try {
 			routeName = valueOf(name);
@@ -39,11 +44,17 @@ public class PersonUIController {
 			case Page -> new PersonPageModel(peopleService.personTableModel());
 			case PersonDetails, PersonDetailsCard, PersonDetailsRow
 				-> peopleService.personDetailModel(id);
-			case PersonTable -> peopleService.peopleForSearch(request.getParameter("search"));
 			case PersonRow -> peopleService.personTableRowModel(id);
 			case PersonEditor -> peopleService.personEditModel(id);
+			default -> throw new IllegalStateException(
+				routeName + " is served by its own dedicated endpoint, not " + getClass().getSimpleName() + "#uiroute");
 		};
 		return renderer.render(name, vm);
+	}
+
+	@GetMapping("/uiroute/PersonTable") // Java-HONO
+	public String personTable(@RequestParam(name = "search", required = false) String search) {
+		return renderer.render(PersonTable.name(), peopleService.peopleForSearch(search));
 	}
 
 }
