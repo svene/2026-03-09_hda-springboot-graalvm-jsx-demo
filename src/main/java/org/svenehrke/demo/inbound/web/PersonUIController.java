@@ -2,8 +2,10 @@ package org.svenehrke.demo.inbound.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.svenehrke.demo.core.PeopleService;
 import org.svenehrke.demo.inbound.web.infra.js.JsxRenderer;
 
@@ -31,7 +33,7 @@ public class PersonUIController {
 		try {
 			routeName = valueOf(name);
 		} catch (IllegalArgumentException e) {
-			return renderer.render(PersonRow.name(), null); // TODO: return 404-response
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown uiroute: " + name);
 		}
 		Object vm = switch (routeName) {
 			case Page -> new PersonPageModel(peopleService.personTableModel());

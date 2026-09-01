@@ -4,4 +4,5 @@ package org.svenehrke.demo.inbound.web;
 public enum JTSPersonEventName {
 	PERSON_UPDATED,
 	PersonDetailsRow_CloseCmd, // TS-only
+	PersonEditor_CloseRequested, // TS-only
 }

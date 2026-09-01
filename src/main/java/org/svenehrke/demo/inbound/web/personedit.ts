@@ -10,7 +10,7 @@ import {HtmlResult} from "./route-types";
 export const PersonEditor = (vm: PersonEditModel): HtmlResult => html`
 	<tr id="row-${vm.id}-edit">
 		<template
-			hx-trigger="${EditEvents.CLOSE_REQUESTED}[detail.id == ${vm.id}] from:'closest tr'"
+			hx-trigger="${eventName('PersonEditor_CloseRequested')}[detail.id == ${vm.id}] from:'closest tr'"
 			hx-target="closest tr"
 			hx-swap="outerHTML"
 			hx-get="${personRoutes.PersonDetailsCard.url(vm.id)}"
@@ -55,7 +55,7 @@ export const PersonEditor = (vm: PersonEditModel): HtmlResult => html`
 					<nav class="level">
 						<button
 							class="level-item button"
-							_="on click halt the event then send '${EditEvents.CLOSE_REQUESTED}'(id:${vm.id})"
+							_="on click halt the event then send ${eventName('PersonEditor_CloseRequested')}(id:${vm.id})"
 						>&lt; Back
 						</button>
 						<button
@@ -72,7 +72,3 @@ export const PersonEditor = (vm: PersonEditModel): HtmlResult => html`
 		</td>
 	</tr>
 `;
-
-const EditEvents = {
-	CLOSE_REQUESTED: 'close-edit-requested',
-};

@@ -1,5 +1,5 @@
 import {ActionUrlDefinition, RouteDefinition} from "./route-types";
-import {PersonDetailsCard} from "./personDetailsCard";
+import {PersonDetailsCard} from "./persondetailscard";
 import {Page} from "./personpage";
 import {PersonDetails} from "./persondetails";
 import {PersonRow} from "./personrow";
