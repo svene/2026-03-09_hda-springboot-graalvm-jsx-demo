@@ -14,11 +14,11 @@ async function build() {
 
 async function main() {
 	await build();
-	console.log(`Watching ${scanRoot} for .tsx changes...`);
+	console.log(`Watching ${scanRoot} for .ts changes...`);
 
 	let debounce: Timer | null = null;
 	watch(scanRoot, {recursive: true}, (event, filename) => {
-		if (!filename?.endsWith(".tsx")) return;
+		if (!filename?.endsWith(".ts")) return;
 		if (debounce) clearTimeout(debounce);
 		debounce = setTimeout(async () => {
 			console.log(`\n${filename} changed, rebuilding...`);

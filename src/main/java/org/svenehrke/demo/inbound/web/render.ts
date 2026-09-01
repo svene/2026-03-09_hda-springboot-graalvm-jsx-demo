@@ -20,7 +20,7 @@ import {RouteDefinition} from "./route-types";
  *  - `String()` / `.toString()` also runs hono's stringify phase, which resolves
  *    any deferred escaping callbacks. Handing Java the raw object skips it.
  *
- * So: `HtmlResult` everywhere inside the .tsx components, stringify exactly once
+ * So: `HtmlResult` everywhere inside the .ts components, stringify exactly once
  * right here at the Java call site.
  */
 export function render(route: string, vmJson: string): string {

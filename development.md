@@ -17,17 +17,17 @@ it is easy to do so in Java, deserializing them in JS is easy as well and much m
 
 ### Generate JS for GraalVM (hono/html templates)
 
-- The `.tsx` components render HTML with hono's `html` tagged-template function
+- The `.ts` components render HTML with hono's `html` tagged-template function
   (`import {html} from "hono/html"`), not with JSX. Each component is a plain function
   `(vm: SomeModel): HtmlResult => html`...`` where `HtmlResult = ReturnType<typeof html>`
-  (see `route-types.ts`). The files keep the `.tsx` extension for now even though none of
-  them contain JSX any more — see "Possible cleanup: `.tsx` -> `.ts`" below.
+  (see `route-types.ts`). These files used to be `.tsx` (JSX) — since the conversion they contain
+  no JSX and are plain `.ts`; `tsconfig.json` no longer sets `jsx` / `jsxImportSource`.
 - started by invoking `npm run build`...
 - ... which runs:\
-`npx esbuild src/main/java/org/svenehrke/demo/inbound/web/render.tsx --bundle --platform=neutral --format=cjs --outfile=target/classes/static/fe/ssr.js`
-- This means a single JS file (`ssr.js`) is generated from the `.tsx`/`.ts` files to be used from Java via GraalVM.
-- `render.tsx` exports a single `render(route, vmJson)` entry function. It doesn't dispatch itself —
-  it looks `route` up in `routes.tsx`'s `personRoutes` map and calls that entry's `render(vm)`:
+`npx esbuild src/main/java/org/svenehrke/demo/inbound/web/render.ts --bundle --platform=neutral --format=cjs --outfile=target/classes/static/fe/ssr.js`
+- This means a single JS file (`ssr.js`) is generated from the `.ts` files to be used from Java via GraalVM.
+- `render.ts` exports a single `render(route, vmJson)` entry function. It doesn't dispatch itself —
+  it looks `route` up in `routes.ts`'s `personRoutes` map and calls that entry's `render(vm)`:
 ````JS
 import {html} from 'hono/html';
 import {personRoutes} from "./routes";
@@ -54,35 +54,29 @@ public String uiroute(@PathVariable String name, @RequestParam(required = false)
 - **Why the `String(...)` at the boundary matters:** the per-route `render` functions return
   `HtmlResult` (a boxed `HtmlEscapedString`, possibly a `Promise`), but `JsxRenderer.java` calls
   `result.asString()` on whatever this function returns, which only works on a primitive JS string.
-  `render.tsx`'s header comment has the full explanation (boxed-String unboxing, the union collapse,
+  `render.ts`'s header comment has the full explanation (boxed-String unboxing, the union collapse,
   hono's stringify phase). Rule of thumb: `HtmlResult` everywhere inside the components, stringify
-  exactly once in `render.tsx`.
+  exactly once in `render.ts`.
 - Adding a new route means: add the `JTSPersonRouteName` value (Java enum, regenerated into
   `vm-types.d.ts`), wire it into `PersonUIController.java`, and add its entry to `personRoutes` in
-  `routes.tsx` (the `satisfies Record<JTSPersonRouteName, RouteDefinition>` makes a missing entry a
+  `routes.ts` (the `satisfies Record<JTSPersonRouteName, RouteDefinition>` makes a missing entry a
   type error).
 
-#### Possible cleanup: `.tsx` -> `.ts` (later)
+#### `.tsx` -> `.ts` (done)
 
-Since the move from JSX to `hono/html` tagged templates, **no file under
-`src/main/java/org/svenehrke/demo/inbound/web/` contains JSX any more**, so every `.tsx` there could
-become `.ts`. It's a small, genuine complexity reduction: no more `jsx` / `jsxImportSource` in
-`tsconfig.json`, and the file extension stops implying a JSX capability that isn't used. Not done yet
-because it also touches:
-
-- `package.json` `build` script (hardcodes `render.tsx`)
-- `watch.ts` (filters on `filename.endsWith(".tsx")` — switching to `.ts` also makes it finally
-  rebuild on `route-types.ts` edits, which it ignores today)
-- `tsconfig.json` (drop the now-dead `jsx` options)
-- ~11 file renames + the git-history churn
+The web layer used JSX until the `hono/html` conversion; afterwards no file under
+`src/main/java/org/svenehrke/demo/inbound/web/` contained JSX, so all of them were renamed `.tsx` ->
+`.ts`. Changed at the same time: `package.json` `build` script (`render.ts`), `watch.ts` (now
+filters `.endsWith(".ts")`, so it also rebuilds on `route-types.ts` edits, which it ignored
+before), and `tsconfig.json` (dropped the now-dead `jsx` / `jsxImportSource` options).
 
 ### Live reload for the browser
-During development the browser should automatically refresh when one of the tsx files is changed.
+During development the browser should automatically refresh when one of the .ts files is changed.
 
 This is achieved by using a SSE connection (see `DevReloadSSE.java`) which will
 be triggered by `JsBundleWatcher` whenever the `ssr.js` bundle changed.
 
-`layout.tsx` with `dev.js` then listens to these SSE events:
+`layout.ts` with `dev.js` then listens to these SSE events:
 ````js
 new EventSource("/dev-reload")
   .addEventListener("reload", () => {
@@ -117,5 +111,5 @@ TS-components use
 - vm-types/*Model for VMs
 - vm-types/JTSPersonEventName to send events inside the UI
 
-TS-routing (routes.tsx) uses
+TS-routing (routes.ts) uses
 - vm-types/JTSPersonRouteName for route definitions
