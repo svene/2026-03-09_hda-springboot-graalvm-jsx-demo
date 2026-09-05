@@ -43,7 +43,7 @@ project-root/
 │   ├── application.properties       # app.ssr.resource=classpath:/graaljs/ssr.js
 │   ├── application-dev.properties
 │   ├── db/migration/V1__create_person_table.sql   (Flyway)
-│   └── static/                      # bulma.min.css, htmx 4, hyperscript 0.9.93, alpine 3.16.3, main.js, dev.js
+│   └── static/                      # css/bulma/1.0.4/bulma.min.css, htmx 4, hyperscript 0.9.93, alpine 3.16.3, main.js, dev.js
 └── target/classes/graaljs/ssr.js   # esbuild output — deliberately NOT under static/ so Spring won't web-serve it
 ```
 

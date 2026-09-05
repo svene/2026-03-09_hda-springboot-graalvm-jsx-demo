@@ -7,7 +7,7 @@ export const Layout = (content: HtmlResult): HtmlResult => html`
 		<meta charset="UTF-8"/>
 		<title>People Admin Application</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>"/>
-		<link rel="stylesheet" href="/css/bulma.min.css"/>
+		<link rel="stylesheet" href="/css/bulma/1.0.4/bulma.min.css"/>
 		<script src="/js/htmx.org/4.0.0/htmx.js"></script>
 		<script src="/js/hyperscript.org/0.9.93/_hyperscript.js"></script>
 		<script defer src="/js/main.js"></script>
